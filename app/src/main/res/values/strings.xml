@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">Comtrade-Auto-perionica</string>
     <string name="action_settings">Settings</string>
+    <string name="title_activity_dodaj_auto">DodajAutoActivity</string>
+    <string name="ime_vlasnika">Ime vlasnika</string>
+    <string name="broj_telefona">Broj telefona</string>
+    <string name="registracija">Registracija</string>
+    <string name="pranje">pranje</string>
 </resources>
