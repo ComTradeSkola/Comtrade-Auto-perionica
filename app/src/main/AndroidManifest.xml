@@ -22,6 +22,10 @@
         <activity
             android:name=".DodajAutoActivity"
             android:label="@string/title_activity_dodaj_auto"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".AutomobilActivity"
+            android:label="@string/title_activity_automobil"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

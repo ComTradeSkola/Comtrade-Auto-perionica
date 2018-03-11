@@ -6,4 +6,5 @@
     <string name="broj_telefona">Broj telefona</string>
     <string name="registracija">Registracija</string>
     <string name="pranje">pranje</string>
+    <string name="title_activity_automobil">AutomobilActivity</string>
 </resources>
