@@ -8,17 +8,45 @@ public class Automobil implements Parcelable {
 
     private String imeVlasnika;
     private String registracija;
-    private String BrojTelefona;
+    private String brojTelefona;
     private String slikaUri;
+    private int cena;
     private boolean pranje;
     private boolean usisavanje;
     private boolean voskiranje;
     private int boja;
 
+
+
+    public Automobil(String imeVlasnika, String registracija, String brojTelefona, String slikaUri, int cena, boolean pranje, boolean usisavanje, boolean voskiranje, int boja) {
+        this.imeVlasnika = imeVlasnika;
+        this.registracija = registracija;
+        this.brojTelefona = brojTelefona;
+        this.slikaUri = slikaUri;
+        this.cena = cena;
+        this.pranje = pranje;
+        this.usisavanje = usisavanje;
+        this.voskiranje = voskiranje;
+        this.boja = boja;
+    }
+
+    public Automobil(String imeVlasnika, String registracija, String brojTelefona, int cena, boolean pranje, boolean usisavanje, boolean voskiranje, int boja) {
+        this.imeVlasnika = imeVlasnika;
+        this.registracija = registracija;
+        this.brojTelefona = brojTelefona;
+        this.cena = cena;
+        this.pranje = pranje;
+        this.usisavanje = usisavanje;
+        this.voskiranje = voskiranje;
+        this.boja = boja;
+    }
+
+
+
     public Automobil(String imeVlasnika, String registracija, String brojTelefona, String slikaUri, boolean pranje, boolean usisavanje, boolean voskiranje, int boja) {
         this.imeVlasnika = imeVlasnika;
         this.registracija = registracija;
-        BrojTelefona = brojTelefona;
+        this.brojTelefona = brojTelefona;
         this.slikaUri = slikaUri;
         this.pranje = pranje;
         this.usisavanje = usisavanje;
@@ -28,6 +56,14 @@ public class Automobil implements Parcelable {
 
     public String getImeVlasnika() {
         return imeVlasnika;
+    }
+
+    public int getCena() {
+        return cena;
+    }
+
+    public void setCena(int cena) {
+        this.cena = cena;
     }
 
     public void setImeVlasnika(String imeVlasnika) {
@@ -43,11 +79,11 @@ public class Automobil implements Parcelable {
     }
 
     public String getBrojTelefona() {
-        return BrojTelefona;
+        return brojTelefona;
     }
 
     public void setBrojTelefona(String brojTelefona) {
-        BrojTelefona = brojTelefona;
+        this.brojTelefona = brojTelefona;
     }
 
     public String getSlikaUri() {
@@ -93,7 +129,7 @@ public class Automobil implements Parcelable {
     public Automobil(String imeVlasnika, String registracija, String brojTelefona, String slikaUri, boolean pranje, boolean usisavanje, boolean voskiranje) {
         this.imeVlasnika = imeVlasnika;
         this.registracija = registracija;
-        BrojTelefona = brojTelefona;
+        this.brojTelefona = brojTelefona;
         this.slikaUri = slikaUri;
         this.pranje = pranje;
         this.usisavanje = usisavanje;
@@ -103,12 +139,13 @@ public class Automobil implements Parcelable {
     protected Automobil(Parcel in) {
         imeVlasnika = in.readString();
         registracija = in.readString();
-        BrojTelefona = in.readString();
+        brojTelefona = in.readString();
         slikaUri = in.readString();
         pranje = in.readByte() != 0x00;
         usisavanje = in.readByte() != 0x00;
         voskiranje = in.readByte() != 0x00;
         boja = in.readInt();
+        cena = in.readInt();
     }
 
     @Override
@@ -120,12 +157,13 @@ public class Automobil implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(imeVlasnika);
         dest.writeString(registracija);
-        dest.writeString(BrojTelefona);
+        dest.writeString(brojTelefona);
         dest.writeString(slikaUri);
         dest.writeByte((byte) (pranje ? 0x01 : 0x00));
         dest.writeByte((byte) (usisavanje ? 0x01 : 0x00));
         dest.writeByte((byte) (voskiranje ? 0x01 : 0x00));
         dest.writeInt(boja);
+        dest.writeInt(cena);
     }
 
     @SuppressWarnings("unused")
