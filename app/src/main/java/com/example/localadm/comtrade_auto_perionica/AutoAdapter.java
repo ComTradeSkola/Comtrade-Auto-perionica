@@ -10,9 +10,10 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
+import java.util.Collections;
 import java.util.List;
 
-public class AutoAdapter extends RecyclerView.Adapter<AutoAdapter.AutoViewHolder>{
+public class AutoAdapter extends RecyclerView.Adapter<AutoAdapter.AutoViewHolder> implements ItemTouchHelperAdapter {
 
     private List<Automobil> automobilList;
     private OnAutomobilSelected onAutomobilSelected;
@@ -22,6 +23,24 @@ public class AutoAdapter extends RecyclerView.Adapter<AutoAdapter.AutoViewHolder
         this.onAutomobilSelected = onAutomobilSelected;
     }
 
+    @Override
+    public void onItemMove(int fromPosition, int toPosition) {
+        if (fromPosition < toPosition) {
+            for (int i = fromPosition; i < toPosition; i++) {
+                Collections.swap(automobilList, i, i + 1);
+            }
+        } else {
+            for (int i = fromPosition; i > toPosition; i--) {
+                Collections.swap(automobilList  , i, i - 1);
+            }
+        }
+        notifyItemMoved(fromPosition, toPosition);
+    }
+
+    @Override
+    public void onItemDismiss(int position) {
+        Automobil automobil = automobilList.remove(position);
+    }
 
 
     static class AutoViewHolder extends RecyclerView.ViewHolder {
