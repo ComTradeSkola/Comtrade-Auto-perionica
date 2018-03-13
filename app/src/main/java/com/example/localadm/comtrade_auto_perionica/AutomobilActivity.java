@@ -28,6 +28,10 @@ public class AutomobilActivity extends AppCompatActivity implements AutoAdapter.
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+
+
+        autoList = new ArrayList<>();
+
 //        Automobil automobil = new Automobil("miljan", "bg 45 33", "5465465", 50, true, true, false, 5);
 //        autoList.add(automobil);
 

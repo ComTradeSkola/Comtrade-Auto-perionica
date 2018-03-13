@@ -86,6 +86,7 @@ public class AutoAdapter extends RecyclerView.Adapter<AutoAdapter.AutoViewHolder
                 onAutomobilSelected.onAutomobilSelected(automobil);
             }
         });
+
     }
 
     @Override
