@@ -95,7 +95,7 @@ public class AutoAdapter extends RecyclerView.Adapter<AutoAdapter.AutoViewHolder
         holder.imeVlsnikaTextView.setText(automobil.getImeVlasnika());
         holder.registracijaTextView.setText(automobil.getRegistracija());
         holder.brojTelefonaTextView.setText(automobil.getBrojTelefona());
-        holder.cenaTextView.setText(automobil.getCena());
+        holder.cenaTextView.setText(String.format("%d", automobil.getCena()));
         holder.pranje.setChecked(automobil.isPranje());
         holder.usisavanje.setChecked(automobil.isUsisavanje());
         holder.voskiranje.setChecked(automobil.isVoskiranje());
