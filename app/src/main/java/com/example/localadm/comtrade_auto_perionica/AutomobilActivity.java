@@ -1,6 +1,8 @@
 package com.example.localadm.comtrade_auto_perionica;
 
+import android.content.ContentValues;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -12,6 +14,9 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.example.localadm.comtrade_auto_perionica.database.DatabaseContract;
+import com.example.localadm.comtrade_auto_perionica.database.DatabaseHelper;
+
 import java.util.ArrayList;
 
 public class AutomobilActivity extends AppCompatActivity implements AutoAdapter.OnAutomobilSelected {
@@ -20,6 +25,8 @@ public class AutomobilActivity extends AppCompatActivity implements AutoAdapter.
     RecyclerView recyclerView;
     ArrayList<Automobil> autoList;
     AutoAdapter autoAdapter;
+    DatabaseHelper databaseHelper;
+    SQLiteDatabase database;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,29 +35,34 @@ public class AutomobilActivity extends AppCompatActivity implements AutoAdapter.
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        databaseHelper = new DatabaseHelper(this);
+        database = databaseHelper.getWritableDatabase();
+
         //Automobil automobil;
 
         autoList = new ArrayList<>();
 
-        autoList.add (new Automobil("Miljan1 Miljan", "bg 11445 ww", "054265465", 150, true, true, false, 5));
-        autoList.add (new Automobil("Miljan2 Miljan", "bg 11345 33", "054635465", 50, true, false, false, 5));
-        autoList.add (new Automobil("Miljan3 Miljan", "bg 11245 33", "0546545465", 350, true, false, false, 5));
-        autoList.add (new Automobil("Miljan4 Miljan", "bg 1451 tt", "054654655", 250, true, true, false, 5));
-        autoList.add (new Automobil("Miljan5 Miljan", "bg 1452 rr", "0546546515", 250, true, false, true, 5));
-        autoList.add (new Automobil("Miljan6 Miljan", "bg 1453 ff", "054654655", 250, true, true, true, 5));
-        autoList.add (new Automobil("Miljan7 Miljan", "bg 1455 xx", "0546546355", 250, true, true, false, 5));
+        autoList.add(new Automobil("Miljan1 Miljan", "bg 11445 ww", "054265465", 150, true, true, false, 5));
+        autoList.add(new Automobil("Miljan2 Miljan", "bg 11345 33", "054635465", 50, true, false, false, 5));
+        autoList.add(new Automobil("Miljan3 Miljan", "bg 11245 33", "0546545465", 350, true, false, false, 5));
+        autoList.add(new Automobil("Miljan4 Miljan", "bg 1451 tt", "054654655", 250, true, true, false, 5));
+        autoList.add(new Automobil("Miljan5 Miljan", "bg 1452 rr", "0546546515", 250, true, false, true, 5));
+        autoList.add(new Automobil("Miljan6 Miljan", "bg 1453 ff", "054654655", 250, true, true, true, 5));
+        autoList.add(new Automobil("Miljan7 Miljan", "bg 1455 xx", "0546546355", 250, true, true, false, 5));
 
 
         recyclerView = findViewById(R.id.recycler_view);
 
 
-        autoAdapter = new AutoAdapter(autoList, this);
-        ItemTouchHelper.Callback callback =
-                new SimpleItemTouchHelperCallback(autoAdapter);
-        ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
-        touchHelper.attachToRecyclerView(recyclerView);
-        recyclerView.setAdapter(autoAdapter);
-
+        if (savedInstanceState == null) {
+            citajAutomobileIzBaze();
+            autoAdapter = new AutoAdapter(autoList, this);
+            ItemTouchHelper.Callback callback =
+                    new SimpleItemTouchHelperCallback(autoAdapter);
+            ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
+            touchHelper.attachToRecyclerView(recyclerView);
+            recyclerView.setAdapter(autoAdapter);
+        }
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -60,6 +72,23 @@ public class AutomobilActivity extends AppCompatActivity implements AutoAdapter.
                 otvoriDodajAutoActivity();
             }
         });
+    }
+
+    private void citajAutomobileIzBaze() {
+        
+    }
+
+    private void dodajAutoUBazu(Automobil automobil) {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(DatabaseContract.Automobil.IME_VLASNIKA, automobil.getImeVlasnika());
+        contentValues.put(DatabaseContract.Automobil.REGISTRACIJA, automobil.getRegistracija());
+        contentValues.put(DatabaseContract.Automobil.BROJ_TELEFONA, automobil.getBrojTelefona());
+        contentValues.put(DatabaseContract.Automobil.CENA, automobil.getCena());
+        contentValues.put(DatabaseContract.Automobil.PRANJE, automobil.isPranje() ? 1 : 0);
+        contentValues.put(DatabaseContract.Automobil.USISAVANJE, automobil.isUsisavanje() ? 1 : 0);
+        contentValues.put(DatabaseContract.Automobil.VOSKIRANJE, automobil.isVoskiranje() ? 1 : 0);
+
+        database.insert(DatabaseContract.Automobil.TABLE_NAME, null, contentValues);
     }
 
     private void otvoriDodajAutoActivity() {
