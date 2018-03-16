@@ -15,7 +15,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             DatabaseContract.Automobil.IME_VLASNIKA + " text not null, " +
             DatabaseContract.Automobil.REGISTRACIJA + " text not null, " +
             DatabaseContract.Automobil.BROJ_TELEFONA + " text not null, " +
-            DatabaseContract.Automobil.CENA + " integer not null, " +
+            DatabaseContract.Automobil.CENA + " text not null, " +
             DatabaseContract.Automobil.PRANJE + " integer, " +
             DatabaseContract.Automobil.USISAVANJE + " integer, " +
             DatabaseContract.Automobil.VOSKIRANJE + " integer)";

@@ -54,15 +54,14 @@ public class AutomobilActivity extends AppCompatActivity implements AutoAdapter.
         recyclerView = findViewById(R.id.recycler_view);
 
 
-        if (savedInstanceState == null) {
-            citajAutomobileIzBaze();
+
             autoAdapter = new AutoAdapter(autoList, this);
             ItemTouchHelper.Callback callback =
                     new SimpleItemTouchHelperCallback(autoAdapter);
             ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
             touchHelper.attachToRecyclerView(recyclerView);
             recyclerView.setAdapter(autoAdapter);
-        }
+
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -74,9 +73,7 @@ public class AutomobilActivity extends AppCompatActivity implements AutoAdapter.
         });
     }
 
-    private void citajAutomobileIzBaze() {
-        
-    }
+
 
     private void dodajAutoUBazu(Automobil automobil) {
         ContentValues contentValues = new ContentValues();
