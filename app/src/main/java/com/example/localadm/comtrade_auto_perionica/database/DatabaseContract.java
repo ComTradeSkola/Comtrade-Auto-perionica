@@ -7,7 +7,7 @@ public final class DatabaseContract {
     private DatabaseContract() {}
 
     public final class Automobil implements BaseColumns {
-        public static final String TABLE_NAME = "Automobil";
+        public static final String TABLE_NAME = "automobil";
         public static final String IME_VLASNIKA = "ime_vlasnika";
         public static final String REGISTRACIJA = "registracija";
         public static final String BROJ_TELEFONA = "broj_telefona";

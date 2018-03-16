@@ -10,14 +10,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final int DATABASE_VERSION = 1;
     public static final String DATABASE_NAME = "Auto_perionica.dp";
 
-    public static final String CREATE_TABLE_AUTO = "CREATE_TABLE " + DatabaseContract.Automobil.TABLE_NAME + " " +
-            DatabaseContract.Automobil._ID + " integer primary key autoincrement not null, " +
-            DatabaseContract.Automobil.IME_VLASNIKA + " text not null, " +
-            DatabaseContract.Automobil.REGISTRACIJA + " text not null, " +
-            DatabaseContract.Automobil.BROJ_TELEFONA + " text not null, " +
-            DatabaseContract.Automobil.CENA + " text not null, " +
-            DatabaseContract.Automobil.PRANJE + " integer, " +
-            DatabaseContract.Automobil.USISAVANJE + " integer, " +
+    public static final String CREATE_TABLE_AUTO = "CREATE TABLE " + DatabaseContract.Automobil.TABLE_NAME + " (" +
+            DatabaseContract.Automobil._ID + " integer primary key autoincrement not null unique," +
+            DatabaseContract.Automobil.IME_VLASNIKA + " text not null," +
+            DatabaseContract.Automobil.REGISTRACIJA + " text not null," +
+            DatabaseContract.Automobil.BROJ_TELEFONA + " text not null," +
+            DatabaseContract.Automobil.CENA + " text not null," +
+            DatabaseContract.Automobil.PRANJE + " integer," +
+            DatabaseContract.Automobil.USISAVANJE + " integer," +
             DatabaseContract.Automobil.VOSKIRANJE + " integer)";
 
     private static final String DELETE_TABLE_AUTO =
