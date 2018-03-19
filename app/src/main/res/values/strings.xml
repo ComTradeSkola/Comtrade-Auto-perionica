@@ -7,4 +7,6 @@
     <string name="registracija">Registracija</string>
     <string name="pranje">pranje</string>
     <string name="title_activity_automobil">AutomobilActivity</string>
+    <string name="obavestenje">Potrebna nam je permisija za ovu komandu.</string>
+    <string name="ok">ok</string>
 </resources>
