@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     public static final int DATABASE_VERSION = 1;
-    public static final String DATABASE_NAME = "Auto_perionica.dp";
+    public static final String DATABASE_NAME = "Auto_perionica.db";
 
     public static final String CREATE_TABLE_AUTO = "CREATE TABLE " + DatabaseContract.Automobil.TABLE_NAME + " (" +
             DatabaseContract.Automobil._ID + " integer primary key autoincrement not null unique," +
@@ -16,9 +16,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             DatabaseContract.Automobil.REGISTRACIJA + " text not null," +
             DatabaseContract.Automobil.BROJ_TELEFONA + " text not null," +
             DatabaseContract.Automobil.CENA + " text not null," +
-            DatabaseContract.Automobil.PRANJE + " integer," +
-            DatabaseContract.Automobil.USISAVANJE + " integer," +
-            DatabaseContract.Automobil.VOSKIRANJE + " integer)";
+            DatabaseContract.Automobil.PRANJE + " integer not null," +
+            DatabaseContract.Automobil.USISAVANJE + " integer not null," +
+            DatabaseContract.Automobil.VOSKIRANJE + " integer not null,)" +
+            DatabaseContract.Automobil.SLIKA + "text";
 
     private static final String DELETE_TABLE_AUTO =
             "DROP TABLE IF EXISTS " + DatabaseContract.Automobil.TABLE_NAME;

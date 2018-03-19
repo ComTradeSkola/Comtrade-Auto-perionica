@@ -15,5 +15,6 @@ public final class DatabaseContract {
         public static final String PRANJE = "pranje";
         public static final String USISAVANJE = "usisavanje";
         public static final String VOSKIRANJE = "voskiranje";
+        public static final String SLIKA = "lokacija_slike";
     }
 }
