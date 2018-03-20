@@ -19,7 +19,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             DatabaseContract.Automobil.PRANJE + " integer not null," +
             DatabaseContract.Automobil.USISAVANJE + " integer not null," +
             DatabaseContract.Automobil.VOSKIRANJE + " integer not null,)" +
-            DatabaseContract.Automobil.SLIKA + "text";
+            DatabaseContract.Automobil.SLIKA + " text";
 
     private static final String DELETE_TABLE_AUTO =
             "DROP TABLE IF EXISTS " + DatabaseContract.Automobil.TABLE_NAME;
