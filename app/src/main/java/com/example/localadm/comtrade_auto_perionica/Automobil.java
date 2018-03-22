@@ -29,6 +29,10 @@ public class Automobil implements Parcelable {
         this.boja = boja;
     }
 
+    public Automobil(String imeVlasnika) {
+        this.imeVlasnika = imeVlasnika;
+    }
+
     public Automobil(String imeVlasnika, String registracija, String brojTelefona, int cena, boolean pranje, boolean usisavanje, boolean voskiranje, int boja) {
         this.imeVlasnika = imeVlasnika;
         this.registracija = registracija;

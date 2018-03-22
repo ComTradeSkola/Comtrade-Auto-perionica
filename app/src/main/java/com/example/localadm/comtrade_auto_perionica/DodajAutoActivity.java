@@ -104,6 +104,27 @@ public class DodajAutoActivity extends AppCompatActivity {
         narandzastaBojaImageButton = findViewById(R.id.narandzasta_boja_imageButton);
         crnaBojaImageButton = findViewById(R.id.crna_boja_imageButton);
         dodajAutoButton = findViewById(R.id.dodaj_auto_button);
+        dodajAutoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String imeString = imeVlasnikatextView.getText().toString();
+                String registracijaString = registracijaTextView.getText().toString();
+                String telefonString = brojtelefonaTextView.getText().toString();
+
+                Intent intent = new Intent();
+
+                Automobil automobil = new Automobil(imeString);
+                automobil.setRegistracija(registracijaString);
+                automobil.setBrojTelefona(telefonString);
+                automobil.setPranje(pranjeCheckbox.isChecked());
+                automobil.setVoskiranje(voskiranjeCheckbox.isChecked());
+                automobil.setUsisavanje(usisavanjeCheckbox.isChecked());
+                automobil.setSlikaUri(lokacijaSlike);
+                intent.putExtra(AUTOMOBIL__INTENT_KEY, automobil);
+                setResult(RESULT_OK, intent);
+                finish();
+            }
+        });
     }
 
     private void proveriPermisiju() {
