@@ -8,8 +8,8 @@
 
     <TextView
         android:id="@+id/ime_vlasnika_item"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="26dp"
         android:layout_margin="8dp"
         android:layout_marginTop="8dp"
         android:textSize="21sp"
@@ -20,14 +20,14 @@
 
     <ImageView
         android:id="@+id/image_view_item"
-        android:layout_width="160dp"
-        android:layout_height="90dp"
+        android:layout_width="193dp"
+        android:layout_height="131dp"
         android:layout_margin="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.92"
         app:layout_constraintStart_toEndOf="@+id/ime_vlasnika_item"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -36,10 +36,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
+        android:layout_marginEnd="8dp"
         android:text="Ukloni"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.92"
         app:layout_constraintStart_toEndOf="@+id/voskiranje_item"
         app:layout_constraintTop_toBottomOf="@+id/image_view_item"
         app:layout_constraintVertical_bias="1.0" />
@@ -64,7 +65,7 @@
 
     <TextView
         android:id="@+id/broj_telefona_item"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
@@ -76,11 +77,11 @@
 
     <TextView
         android:id="@+id/registracija_item"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:textSize="18sp"
         android:layout_marginTop="140dp"
+        android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ime_vlasnika_item"
         tools:text="Registracija" />
@@ -96,7 +97,7 @@
 
     <TextView
         android:id="@+id/textView"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="40dp"
         android:layout_marginStart="8dp"
@@ -105,7 +106,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="40dp"
         android:layout_marginStart="65dp"
@@ -114,7 +115,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="40dp"
         android:layout_marginStart="150dp"
@@ -124,28 +125,27 @@
 
     <TextView
         android:id="@+id/textView2"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="24dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:textSize="20sp"
         android:text="CENA:"
+        android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/textView"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/broj_telefona_item"
-         />
+        app:layout_constraintTop_toBottomOf="@+id/broj_telefona_item" />
 
     <TextView
         android:id="@+id/cena_item"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
+        android:textSize="20sp"
+        android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/textView2"
         app:layout_constraintTop_toBottomOf="@+id/broj_telefona_item"
-        tools:text="500"
-        android:textSize="20sp"
-        android:textStyle="bold"/>
+        tools:text="500" />
 
 
 </android.support.constraint.ConstraintLayout>

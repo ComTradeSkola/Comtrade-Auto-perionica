@@ -42,13 +42,9 @@ public class AutomobilActivity extends AppCompatActivity implements AutoAdapter.
 
         autoList = new ArrayList<>();
 
-        autoList.add(new Automobil("Miljan1 Miljan", "bg 11445 ww", "054265465", 150, true, true, false, 5));
-        autoList.add(new Automobil("Miljan2 Miljan", "bg 11345 33", "054635465", 50, true, false, false, 5));
-        autoList.add(new Automobil("Miljan3 Miljan", "bg 11245 33", "0546545465", 350, true, false, false, 5));
-        autoList.add(new Automobil("Miljan4 Miljan", "bg 1451 tt", "054654655", 250, true, true, false, 5));
-        autoList.add(new Automobil("Miljan5 Miljan", "bg 1452 rr", "0546546515", 250, true, false, true, 5));
-        autoList.add(new Automobil("Miljan6 Miljan", "bg 1453 ff", "054654655", 250, true, true, true, 5));
-        autoList.add(new Automobil("Miljan7 Miljan", "bg 1455 xx", "0546546355", 250, true, true, false, 5));
+        autoList.add(new Automobil("Dalibor Mirkovic", "BG 11445 ww", "054265465", 150, true, true, false, 5));
+        autoList.add(new Automobil("Misa Peric", "BG 11345 33", "054635465", 50, true, false, false, 5));
+
 
 
         recyclerView = findViewById(R.id.recycler_view);
