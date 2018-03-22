@@ -97,7 +97,7 @@ public class AutomobilActivity extends AppCompatActivity implements AutoAdapter.
         database.insert(DatabaseContract.Automobil.TABLE_NAME, null, contentValues);
     }
 
-    
+
     private void otvoriDodajAutoActivity() {
         Intent intent = new Intent(this, DodajAutoActivity.class);
         startActivityForResult(intent, DODAJ_AUTO_ACTIVITY_REQUEST_CODE);
