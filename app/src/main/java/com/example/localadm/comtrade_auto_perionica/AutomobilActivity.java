@@ -73,21 +73,31 @@ public class AutomobilActivity extends AppCompatActivity implements AutoAdapter.
         });
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Automobil automobil = data.getParcelableExtra(DodajAutoActivity.AUTOMOBIL__INTENT_KEY);
+        autoList.add(automobil);
+        autoAdapter.notifyItemInserted(autoList.size()-1);
+        addAutoToDataBase(automobil);
 
+        super.onActivityResult(requestCode, resultCode, data);
+    }
 
-    private void dodajAutoUBazu(Automobil automobil) {
+    private void addAutoToDataBase(Automobil automobil) {
         ContentValues contentValues = new ContentValues();
         contentValues.put(DatabaseContract.Automobil.IME_VLASNIKA, automobil.getImeVlasnika());
         contentValues.put(DatabaseContract.Automobil.REGISTRACIJA, automobil.getRegistracija());
         contentValues.put(DatabaseContract.Automobil.BROJ_TELEFONA, automobil.getBrojTelefona());
         contentValues.put(DatabaseContract.Automobil.CENA, automobil.getCena());
+        contentValues.put(DatabaseContract.Automobil.BOJA, automobil.getBoja());
         contentValues.put(DatabaseContract.Automobil.PRANJE, automobil.isPranje() ? 1 : 0);
-        contentValues.put(DatabaseContract.Automobil.USISAVANJE, automobil.isUsisavanje() ? 1 : 0);
         contentValues.put(DatabaseContract.Automobil.VOSKIRANJE, automobil.isVoskiranje() ? 1 : 0);
-
+        contentValues.put(DatabaseContract.Automobil.USISAVANJE, automobil.isUsisavanje() ? 1 : 0);
+        contentValues.put(DatabaseContract.Automobil.SLIKA, automobil.getSlikaUri());
         database.insert(DatabaseContract.Automobil.TABLE_NAME, null, contentValues);
     }
 
+    
     private void otvoriDodajAutoActivity() {
         Intent intent = new Intent(this, DodajAutoActivity.class);
         startActivityForResult(intent, DODAJ_AUTO_ACTIVITY_REQUEST_CODE);

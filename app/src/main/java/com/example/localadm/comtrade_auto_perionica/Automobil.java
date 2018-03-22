@@ -5,7 +5,6 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class Automobil implements Parcelable {
-
     private String imeVlasnika;
     private String registracija;
     private String brojTelefona;

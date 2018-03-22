@@ -1,8 +1,10 @@
 package com.example.localadm.comtrade_auto_perionica;
 
 import android.Manifest;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -10,6 +12,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.service.quicksettings.Tile;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -26,6 +29,9 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.example.localadm.comtrade_auto_perionica.database.DatabaseContract;
+import com.example.localadm.comtrade_auto_perionica.database.DatabaseHelper;
+
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -33,8 +39,11 @@ import java.util.Date;
 
 public class DodajAutoActivity extends AppCompatActivity {
 
+    public static final String AUTOMOBIL__INTENT_KEY = "automobil_intent_key";
+
     private static final int PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE = 10;
     private static final int REQUEST_IMAGE_CAPTURE = 5;
+
     ImageView imageView;
     ImageButton uslikajImageButton;
     TextView imeVlasnikatextView;
@@ -56,6 +65,9 @@ public class DodajAutoActivity extends AppCompatActivity {
     ConstraintLayout layout;
     String lokacijaSlike;
 
+    private DatabaseHelper databaseHelper;
+    private SQLiteDatabase database;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +75,9 @@ public class DodajAutoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_dodaj_auto);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        databaseHelper = new DatabaseHelper(this);
+        database = databaseHelper.getWritableDatabase();
 
         layout = findViewById(R.id.dodaj_auto_layout);
         imageView = findViewById(R.id.image_view_dodaj_auto);
@@ -174,7 +189,10 @@ public class DodajAutoActivity extends AppCompatActivity {
             //imageView.setImageBitmap(imageBitmap);
             new DecodePictureAsyncTask(imageView).execute(lokacijaSlike);
         }
+
     }
+
+
 
     private static class DecodePictureAsyncTask extends AsyncTask<String, Void, Bitmap> {
 
