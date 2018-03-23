@@ -5,6 +5,20 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class Automobil implements Parcelable {
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<Automobil> CREATOR = new Parcelable.Creator<Automobil>() {
+        @Override
+        public Automobil createFromParcel(Parcel in) {
+            return new Automobil(in);
+        }
+
+        @Override
+        public Automobil[] newArray(int size) {
+            return new Automobil[size];
+        }
+    };
+
+    private String databaseID; //TODO ovo je databaseID koji ovaj automobil ima u bazi, jako bitan podatak, dodati getter,settere i parcelable za ovo polje
     private String imeVlasnika;
     private String registracija;
     private String brojTelefona;
@@ -14,8 +28,6 @@ public class Automobil implements Parcelable {
     private boolean usisavanje;
     private boolean voskiranje;
     private int boja;
-
-
 
     public Automobil(String imeVlasnika, String registracija, String brojTelefona, String slikaUri, int cena, boolean pranje, boolean usisavanje, boolean voskiranje, int boja) {
         this.imeVlasnika = imeVlasnika;
@@ -33,6 +45,7 @@ public class Automobil implements Parcelable {
         this.imeVlasnika = imeVlasnika;
     }
 
+
     public Automobil(String imeVlasnika, String registracija, String brojTelefona, int cena, boolean pranje, boolean usisavanje, boolean voskiranje, int boja) {
         this.imeVlasnika = imeVlasnika;
         this.registracija = registracija;
@@ -43,8 +56,6 @@ public class Automobil implements Parcelable {
         this.voskiranje = voskiranje;
         this.boja = boja;
     }
-
-
 
     public Automobil(String imeVlasnika, String registracija, String brojTelefona, String slikaUri, boolean pranje, boolean usisavanje, boolean voskiranje, int boja) {
         this.imeVlasnika = imeVlasnika;
@@ -57,8 +68,34 @@ public class Automobil implements Parcelable {
         this.boja = boja;
     }
 
+    public Automobil(String imeVlasnika, String registracija, String brojTelefona, String slikaUri, boolean pranje, boolean usisavanje, boolean voskiranje) {
+        this.imeVlasnika = imeVlasnika;
+        this.registracija = registracija;
+        this.brojTelefona = brojTelefona;
+        this.slikaUri = slikaUri;
+        this.pranje = pranje;
+        this.usisavanje = usisavanje;
+        this.voskiranje = voskiranje;
+    }
+
+    protected Automobil(Parcel in) {
+        imeVlasnika = in.readString();
+        registracija = in.readString();
+        brojTelefona = in.readString();
+        slikaUri = in.readString();
+        pranje = in.readByte() != 0x00;
+        usisavanje = in.readByte() != 0x00;
+        voskiranje = in.readByte() != 0x00;
+        boja = in.readInt();
+        cena = in.readInt();
+    }
+
     public String getImeVlasnika() {
         return imeVlasnika;
+    }
+
+    public void setImeVlasnika(String imeVlasnika) {
+        this.imeVlasnika = imeVlasnika;
     }
 
     public int getCena() {
@@ -67,10 +104,6 @@ public class Automobil implements Parcelable {
 
     public void setCena(int cena) {
         this.cena = cena;
-    }
-
-    public void setImeVlasnika(String imeVlasnika) {
-        this.imeVlasnika = imeVlasnika;
     }
 
     public String getRegistracija() {
@@ -129,28 +162,6 @@ public class Automobil implements Parcelable {
         this.boja = boja;
     }
 
-    public Automobil(String imeVlasnika, String registracija, String brojTelefona, String slikaUri, boolean pranje, boolean usisavanje, boolean voskiranje) {
-        this.imeVlasnika = imeVlasnika;
-        this.registracija = registracija;
-        this.brojTelefona = brojTelefona;
-        this.slikaUri = slikaUri;
-        this.pranje = pranje;
-        this.usisavanje = usisavanje;
-        this.voskiranje = voskiranje;
-    }
-
-    protected Automobil(Parcel in) {
-        imeVlasnika = in.readString();
-        registracija = in.readString();
-        brojTelefona = in.readString();
-        slikaUri = in.readString();
-        pranje = in.readByte() != 0x00;
-        usisavanje = in.readByte() != 0x00;
-        voskiranje = in.readByte() != 0x00;
-        boja = in.readInt();
-        cena = in.readInt();
-    }
-
     @Override
     public int describeContents() {
         return 0;
@@ -168,17 +179,4 @@ public class Automobil implements Parcelable {
         dest.writeInt(boja);
         dest.writeInt(cena);
     }
-
-    @SuppressWarnings("unused")
-    public static final Parcelable.Creator<Automobil> CREATOR = new Parcelable.Creator<Automobil>() {
-        @Override
-        public Automobil createFromParcel(Parcel in) {
-            return new Automobil(in);
-        }
-
-        @Override
-        public Automobil[] newArray(int size) {
-            return new Automobil[size];
-        }
-    };
 }

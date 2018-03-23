@@ -1,5 +1,6 @@
 package com.example.localadm.comtrade_auto_perionica;
 
+import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
@@ -10,9 +11,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.example.localadm.comtrade_auto_perionica.database.DatabaseContract;
 import com.example.localadm.comtrade_auto_perionica.database.DatabaseHelper;
@@ -28,11 +29,13 @@ public class AutomobilActivity extends AppCompatActivity implements AutoAdapter.
     DatabaseHelper databaseHelper;
     SQLiteDatabase database;
 
+    int ukupnaCena; //TODO cena svih pranja, voditi racuna da ovo treba da se sacuva i kada se aplikacija zavrsi i kada se aktiviti rotira. Koristiti shared preferences.
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_automobil);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         databaseHelper = new DatabaseHelper(this);
@@ -42,25 +45,21 @@ public class AutomobilActivity extends AppCompatActivity implements AutoAdapter.
 
         autoList = new ArrayList<>();
 
-        autoList.add(new Automobil("Dalibor Mirkovic", "BG 11445 ww", "054265465", 150, true, true, false, 5));
-        autoList.add(new Automobil("Misa Peric", "BG 11345 33", "054635465", 50, true, false, false, 5));
-
-
+        autoList.add(new Automobil("Dalibor Mirkovic", "BG 11445 ww", "054265465", 150, true, true, false, 0));
+        autoList.add(new Automobil("Misa Peric", "BG 11345 33", "054635465", 50, true, false, false, 0));
 
         recyclerView = findViewById(R.id.recycler_view);
 
-
-
-            autoAdapter = new AutoAdapter(autoList, this);
-            ItemTouchHelper.Callback callback =
-                    new SimpleItemTouchHelperCallback(autoAdapter);
-            ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
-            touchHelper.attachToRecyclerView(recyclerView);
-            recyclerView.setAdapter(autoAdapter);
+        autoAdapter = new AutoAdapter(autoList, this);
+        ItemTouchHelper.Callback callback =
+                new SimpleItemTouchHelperCallback(autoAdapter);
+        ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
+        touchHelper.attachToRecyclerView(recyclerView);
+        recyclerView.setAdapter(autoAdapter);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -71,12 +70,18 @@ public class AutomobilActivity extends AppCompatActivity implements AutoAdapter.
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Automobil automobil = data.getParcelableExtra(DodajAutoActivity.AUTOMOBIL__INTENT_KEY);
-        autoList.add(automobil);
-        autoAdapter.notifyItemInserted(autoList.size()-1);
-        addAutoToDataBase(automobil);
-
-        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == DODAJ_AUTO_ACTIVITY_REQUEST_CODE) {
+            if (resultCode == Activity.RESULT_OK) {
+                Automobil automobil = data.getParcelableExtra(DodajAutoActivity.AUTOMOBIL__INTENT_KEY);
+                if (automobil != null) {
+                    autoList.add(automobil);
+                    autoAdapter.notifyItemInserted(autoList.size() - 1);
+                    addAutoToDataBase(automobil);
+                }
+            }
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
     }
 
     private void addAutoToDataBase(Automobil automobil) {
@@ -126,5 +131,22 @@ public class AutomobilActivity extends AppCompatActivity implements AutoAdapter.
         Intent intent = new Intent(this, DodajAutoActivity.class);
         intent.putExtra("todo_to_edit", automobil);
         startActivityForResult(intent, DODAJ_AUTO_ACTIVITY_REQUEST_CODE);
+    }
+
+    @Override
+    public void onAutomobileDeleted(Automobil automobil) {
+        //TODO ovde obrisati iz database, automobil, to znaci da je neko odustao.
+        //sto znaci pozvati metodu ukloniAutoIzDatabase i proslediti joj automobilov databaseId
+    }
+
+    @Override
+    public void onAutomobilDone(Automobil automobil) {
+        //TODO ako je automobil opran, to znaci da treba da uzmemo cenu, da je dodamo na cene koje vec imamo, i onda da uklonimo auto iz databasa
+        //ukupnaCena += cena;
+        //sto znaci pozvati metodu ukloniAutoIzDatabase i proslediti joj automobilov databaseId
+    }
+
+    private void ukloniAutoIzDatabase(int autoDatabaseId) {
+        //TODO ukloniti iz database auto ciji je id = autoDatabaseId
     }
 }

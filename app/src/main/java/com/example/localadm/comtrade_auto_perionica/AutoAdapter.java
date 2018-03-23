@@ -1,9 +1,11 @@
 package com.example.localadm.comtrade_auto_perionica;
 
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -31,7 +33,7 @@ public class AutoAdapter extends RecyclerView.Adapter<AutoAdapter.AutoViewHolder
             }
         } else {
             for (int i = fromPosition; i > toPosition; i--) {
-                Collections.swap(automobilList  , i, i - 1);
+                Collections.swap(automobilList, i, i - 1);
             }
         }
         notifyItemMoved(fromPosition, toPosition);
@@ -40,37 +42,9 @@ public class AutoAdapter extends RecyclerView.Adapter<AutoAdapter.AutoViewHolder
     @Override
     public void onItemDismiss(int position) {
         Automobil automobil = automobilList.remove(position);
-    }
-
-
-    static class AutoViewHolder extends RecyclerView.ViewHolder {
-        private ImageView imageView;
-        private TextView imeVlsnikaTextView;
-        private TextView registracijaTextView;
-        private TextView brojTelefonaTextView;
-        private TextView cenaTextView;
-        private CheckBox pranje;
-        private CheckBox usisavanje;
-        private CheckBox voskiranje;
-        private OnAutomobilClick onAutomobilClick;
-
-        public AutoViewHolder(View itemView, final OnAutomobilClick onAutomobilClick) {
-            super(itemView);
-            this.onAutomobilClick = onAutomobilClick;
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    onAutomobilClick.onAutomobilClicked(getAdapterPosition());
-                }
-            });
-            imeVlsnikaTextView = itemView.findViewById(R.id.ime_vlasnika_item);
-            registracijaTextView = itemView.findViewById(R.id.registracija_item);
-            brojTelefonaTextView = itemView.findViewById(R.id.broj_telefona_item);
-            cenaTextView = itemView.findViewById(R.id.cena_item);
-            imageView = itemView.findViewById(R.id.image_view_item);
-            pranje = itemView.findViewById(R.id.pranje_item);
-            usisavanje = itemView.findViewById(R.id.usisavanje_item);
-            voskiranje = itemView.findViewById(R.id.voskiranje_item);
+        notifyItemRemoved(position);
+        if (onAutomobilSelected != null) {
+            onAutomobilSelected.onAutomobilDone(automobil);
         }
     }
 
@@ -85,8 +59,14 @@ public class AutoAdapter extends RecyclerView.Adapter<AutoAdapter.AutoViewHolder
                 Automobil automobil = automobilList.get(position);
                 onAutomobilSelected.onAutomobilSelected(automobil);
             }
-        });
 
+            @Override
+            public void onUkloniAutomobil(int adapterPosition) {
+                Automobil automobil = automobilList.remove(adapterPosition);
+                notifyItemRemoved(adapterPosition);
+                onAutomobilSelected.onAutomobileDeleted(automobil);
+            }
+        });
     }
 
     @Override
@@ -99,6 +79,9 @@ public class AutoAdapter extends RecyclerView.Adapter<AutoAdapter.AutoViewHolder
         holder.pranje.setChecked(automobil.isPranje());
         holder.usisavanje.setChecked(automobil.isUsisavanje());
         holder.voskiranje.setChecked(automobil.isVoskiranje());
+        if (automobil.getBoja() != 0) { //Ako nema bolje staviti boju na 0, obratiti paznju na ovo
+            holder.itemView.setBackgroundResource(automobil.getBoja());
+        }
         Glide.with(holder.itemView.getContext())
                 .load(automobil.getSlikaUri())
                 .into(holder.imageView);
@@ -106,17 +89,62 @@ public class AutoAdapter extends RecyclerView.Adapter<AutoAdapter.AutoViewHolder
 
     @Override
     public int getItemCount() {
-        return automobilList.size();
+        return automobilList != null ? automobilList.size() : 0;
     }
 
     public interface OnAutomobilSelected {
         void onAutomobilSelected(Automobil automobil);
+        void onAutomobileDeleted(Automobil automobil);
+        void onAutomobilDone(Automobil automobil);
     }
 
     public interface OnAutomobilClick {
         void onAutomobilClicked(int position);
+        void onUkloniAutomobil(int adapterPosition);
     }
 
+    static class AutoViewHolder extends RecyclerView.ViewHolder {
+        private ImageView imageView;
+        private TextView imeVlsnikaTextView;
+        private TextView registracijaTextView;
+        private TextView brojTelefonaTextView;
+        private TextView cenaTextView;
+        private CheckBox pranje;
+        private CheckBox usisavanje;
+        private CheckBox voskiranje;
+        private Button uklontAuto;
+        private OnAutomobilClick onAutomobilClick;
+
+        public AutoViewHolder(View itemView, final OnAutomobilClick onAutomobilClick) {
+            super(itemView);
+            this.onAutomobilClick = onAutomobilClick;
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int adapterPosition = getAdapterPosition();
+                    if (adapterPosition != RecyclerView.NO_POSITION && onAutomobilClick != null) {
+                        onAutomobilClick.onAutomobilClicked(adapterPosition);
+                    }
+                }
+            });
+            imeVlsnikaTextView = itemView.findViewById(R.id.ime_vlasnika_item);
+            registracijaTextView = itemView.findViewById(R.id.registracija_item);
+            brojTelefonaTextView = itemView.findViewById(R.id.broj_telefona_item);
+            cenaTextView = itemView.findViewById(R.id.cena_item);
+            imageView = itemView.findViewById(R.id.image_view_item);
+            pranje = itemView.findViewById(R.id.pranje_item);
+            usisavanje = itemView.findViewById(R.id.usisavanje_item);
+            voskiranje = itemView.findViewById(R.id.voskiranje_item);
+            uklontAuto = itemView.findViewById(R.id.ukolni_button_item);
+            uklontAuto.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int adapterPosition = getAdapterPosition();
+                    if (adapterPosition != RecyclerView.NO_POSITION && onAutomobilClick != null) {
+                        onAutomobilClick.onUkloniAutomobil(adapterPosition);
+                    }
+                }
+            });
+        }
+    }
 }
-
-

@@ -1,10 +1,9 @@
 package com.example.localadm.comtrade_auto_perionica;
 
 import android.Manifest;
-import android.content.ContentValues;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -12,10 +11,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.service.quicksettings.Tile;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.FileProvider;
@@ -26,11 +23,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
-
-import com.example.localadm.comtrade_auto_perionica.database.DatabaseContract;
-import com.example.localadm.comtrade_auto_perionica.database.DatabaseHelper;
 
 import java.io.File;
 import java.io.IOException;
@@ -52,32 +45,20 @@ public class DodajAutoActivity extends AppCompatActivity {
     CheckBox pranjeCheckbox;
     CheckBox usisavanjeCheckbox;
     CheckBox voskiranjeCheckbox;
-    ImageButton crvenaBojaImageButton;
-    ImageButton zutaBojaImageButton;
-    ImageButton plavaBojaImageButton;
-    ImageButton lilaBojaImageButton;
-    ImageButton sivaBojaImageButton;
-    ImageButton rozeBojaImageButton;
-    ImageButton crnaBojaImageButton;
-    ImageButton zelenaBojaImageButton;
-    ImageButton narandzastaBojaImageButton;
     Button dodajAutoButton;
     ConstraintLayout layout;
     String lokacijaSlike;
 
-    private DatabaseHelper databaseHelper;
-    private SQLiteDatabase database;
+    //TODO zapamtiti da se na rotaciji ovo mora sacuvati i da se na osnovu ovoga mora opet oznaciti koja je boja selektovana
+    int izabranaBoja;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dodaj_auto);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        databaseHelper = new DatabaseHelper(this);
-        database = databaseHelper.getWritableDatabase();
 
         layout = findViewById(R.id.dodaj_auto_layout);
         imageView = findViewById(R.id.image_view_dodaj_auto);
@@ -94,24 +75,16 @@ public class DodajAutoActivity extends AppCompatActivity {
         pranjeCheckbox = findViewById(R.id.pranje_checkbox);
         usisavanjeCheckbox = findViewById(R.id.usisavanje_checkbox);
         voskiranjeCheckbox = findViewById(R.id.voskiranje_checkbox);
-        crvenaBojaImageButton = findViewById(R.id.crvena_boja_imageButton);
-        plavaBojaImageButton = findViewById(R.id.plava_boja_imageButton);
-        zutaBojaImageButton = findViewById(R.id.zuta_boja_imageButton);
-        zelenaBojaImageButton = findViewById(R.id.zelena_boja_imageButton);
-        rozeBojaImageButton = findViewById(R.id.roze_boja_imageButton);
-        lilaBojaImageButton = findViewById(R.id.lila_boja_imageButton);
-        sivaBojaImageButton = findViewById(R.id.siva_boja_imageButton);
-        narandzastaBojaImageButton = findViewById(R.id.narandzasta_boja_imageButton);
-        crnaBojaImageButton = findViewById(R.id.crna_boja_imageButton);
         dodajAutoButton = findViewById(R.id.dodaj_auto_button);
         dodajAutoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //ucitali podatke
                 String imeString = imeVlasnikatextView.getText().toString();
                 String registracijaString = registracijaTextView.getText().toString();
                 String telefonString = brojtelefonaTextView.getText().toString();
 
-                Intent intent = new Intent();
+                //TODO videti da li su podaci ok, tipa da li su null ili prazni. Ako su null ili prazni, prikazati gresku.
 
                 Automobil automobil = new Automobil(imeString);
                 automobil.setRegistracija(registracijaString);
@@ -120,6 +93,9 @@ public class DodajAutoActivity extends AppCompatActivity {
                 automobil.setVoskiranje(voskiranjeCheckbox.isChecked());
                 automobil.setUsisavanje(usisavanjeCheckbox.isChecked());
                 automobil.setSlikaUri(lokacijaSlike);
+                //TODO dodati selektovanu boju.
+
+                Intent intent = new Intent();
                 intent.putExtra(AUTOMOBIL__INTENT_KEY, automobil);
                 setResult(RESULT_OK, intent);
                 finish();
@@ -213,18 +189,32 @@ public class DodajAutoActivity extends AppCompatActivity {
 
     }
 
+    public void onSelectColor(View view) {
+        int viewId = view.getId();
+        switch (viewId) {
+            case R.id.crvena_boja_imageButton:
+                izabranaBoja = R.color.crvena;
+                break;
+            //TODO dodati kod za ostale boje i dugmice.
+            //1. na svaki button u xml dodati poziv za ovu metodu, pogledajti android:onClick za button creveni
+            //2. na osnovu id-a, postaviti izabranu boju na zeljenu, sa tim sto treba dodati boje u colors.xml
+            //3. promeniti background clicknutog button da bi se znalo da je on selectovam, dodavanjem bordera oko buttona,
+            // ili eventualno novog viewa, iznad koga ce pisati selectovana boja, a cija ce pozadina biti u selectovanoj boji. Mislim da je ovo drugo dosta lakse.
+        }
+    }
 
 
     private static class DecodePictureAsyncTask extends AsyncTask<String, Void, Bitmap> {
 
-        ImageView imageView;
+        @SuppressLint("StaticFieldLeak")
+        private ImageView imageView;
 
         public DecodePictureAsyncTask(ImageView imageView) {
             this.imageView = imageView;
         }
 
         @Override
-        protected void onPreExecute()    {
+        protected void onPreExecute() {
             super.onPreExecute();
             imageView.setVisibility(View.INVISIBLE);
         }
@@ -260,6 +250,7 @@ public class DodajAutoActivity extends AppCompatActivity {
         protected void onPostExecute(Bitmap bitmap) {
             imageView.setVisibility(View.VISIBLE);
             imageView.setImageBitmap(bitmap);
+            imageView = null;
         }
     }
 }
