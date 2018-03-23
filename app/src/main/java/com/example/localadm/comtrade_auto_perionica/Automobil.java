@@ -18,7 +18,7 @@ public class Automobil implements Parcelable {
         }
     };
 
-    private String databaseID; //TODO ovo je databaseID koji ovaj automobil ima u bazi, jako bitan podatak, dodati getter,settere i parcelable za ovo polje
+    private String databaseID;
     private String imeVlasnika;
     private String registracija;
     private String brojTelefona;
@@ -28,6 +28,19 @@ public class Automobil implements Parcelable {
     private boolean usisavanje;
     private boolean voskiranje;
     private int boja;
+
+    public Automobil(String databaseID, String imeVlasnika, String registracija, String brojTelefona, String slikaUri, int cena, boolean pranje, boolean usisavanje, boolean voskiranje, int boja) {
+        this.databaseID = databaseID;
+        this.imeVlasnika = imeVlasnika;
+        this.registracija = registracija;
+        this.brojTelefona = brojTelefona;
+        this.slikaUri = slikaUri;
+        this.cena = cena;
+        this.pranje = pranje;
+        this.usisavanje = usisavanje;
+        this.voskiranje = voskiranje;
+        this.boja = boja;
+    }
 
     public Automobil(String imeVlasnika, String registracija, String brojTelefona, String slikaUri, int cena, boolean pranje, boolean usisavanje, boolean voskiranje, int boja) {
         this.imeVlasnika = imeVlasnika;
@@ -79,6 +92,7 @@ public class Automobil implements Parcelable {
     }
 
     protected Automobil(Parcel in) {
+        databaseID = in.readString();
         imeVlasnika = in.readString();
         registracija = in.readString();
         brojTelefona = in.readString();
@@ -88,6 +102,14 @@ public class Automobil implements Parcelable {
         voskiranje = in.readByte() != 0x00;
         boja = in.readInt();
         cena = in.readInt();
+    }
+
+    public String getDatabaseID() {
+        return databaseID;
+    }
+
+    public void setDatabaseID(String databaseID) {
+        this.databaseID = databaseID;
     }
 
     public String getImeVlasnika() {
@@ -169,6 +191,7 @@ public class Automobil implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(databaseID);
         dest.writeString(imeVlasnika);
         dest.writeString(registracija);
         dest.writeString(brojTelefona);
