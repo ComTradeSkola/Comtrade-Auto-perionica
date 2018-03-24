@@ -80,25 +80,32 @@ public class DodajAutoActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //ucitali podatke
+
                 String imeString = imeVlasnikatextView.getText().toString();
                 String registracijaString = registracijaTextView.getText().toString();
                 String telefonString = brojtelefonaTextView.getText().toString();
 
-                //TODO videti da li su podaci ok, tipa da li su null ili prazni. Ako su null ili prazni, prikazati gresku.
+                if (imeVlasnikatextView.length() == 0) {
+                    Snackbar.make(view, "Niste uneli ime", Snackbar.LENGTH_SHORT).show();
+                } else if (registracijaTextView.length() == 0) {
+                    Snackbar.make(view, "Niste uneli registraciju", Snackbar.LENGTH_SHORT).show();
+                } else if (brojtelefonaTextView.length() == 0) {
+                    Snackbar.make(view, "Niste uneli broj telefona", Snackbar.LENGTH_SHORT).show();
+                } else {
+                    Automobil automobil = new Automobil(imeString);
+                    automobil.setRegistracija(registracijaString);
+                    automobil.setBrojTelefona(telefonString);
+                    automobil.setPranje(pranjeCheckbox.isChecked());
+                    automobil.setVoskiranje(voskiranjeCheckbox.isChecked());
+                    automobil.setUsisavanje(usisavanjeCheckbox.isChecked());
+                    automobil.setSlikaUri(lokacijaSlike);
+                    automobil.setBoja(izabranaBoja);
 
-                Automobil automobil = new Automobil(imeString);
-                automobil.setRegistracija(registracijaString);
-                automobil.setBrojTelefona(telefonString);
-                automobil.setPranje(pranjeCheckbox.isChecked());
-                automobil.setVoskiranje(voskiranjeCheckbox.isChecked());
-                automobil.setUsisavanje(usisavanjeCheckbox.isChecked());
-                automobil.setSlikaUri(lokacijaSlike);
-                //TODO dodati selektovanu boju.
-
-                Intent intent = new Intent();
-                intent.putExtra(AUTOMOBIL__INTENT_KEY, automobil);
-                setResult(RESULT_OK, intent);
-                finish();
+                    Intent intent = new Intent();
+                    intent.putExtra(AUTOMOBIL__INTENT_KEY, automobil);
+                    setResult(RESULT_OK, intent);
+                    finish();
+                }
             }
         });
     }
@@ -181,9 +188,6 @@ public class DodajAutoActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            //Bundle extras = data.getExtras();
-            //Bitmap imageBitmap = (Bitmap) extras.get("data");
-            //imageView.setImageBitmap(imageBitmap);
             new DecodePictureAsyncTask(imageView).execute(lokacijaSlike);
         }
 
@@ -194,63 +198,92 @@ public class DodajAutoActivity extends AppCompatActivity {
         switch (viewId) {
             case R.id.crvena_boja_imageButton:
                 izabranaBoja = R.color.crvena;
+                view.setBackgroundResource(R.drawable.ic_color_selected);
                 break;
-            //TODO dodati kod za ostale boje i dugmice.
-            //1. na svaki button u xml dodati poziv za ovu metodu, pogledajti android:onClick za button creveni
-            //2. na osnovu id-a, postaviti izabranu boju na zeljenu, sa tim sto treba dodati boje u colors.xml
-            //3. promeniti background clicknutog button da bi se znalo da je on selectovam, dodavanjem bordera oko buttona,
-            // ili eventualno novog viewa, iznad koga ce pisati selectovana boja, a cija ce pozadina biti u selectovanoj boji. Mislim da je ovo drugo dosta lakse.
+            case R.id.zuta_boja_imageButton:
+                izabranaBoja = R.color.zuta;
+                view.setBackgroundResource(R.drawable.ic_color_selected);
+                break;
+            case R.id.plava_boja_imageButton:
+                izabranaBoja = R.color.plava;
+                view.setBackgroundResource(R.drawable.ic_color_selected);
+                break;
+            case R.id.roze_boja_imageButton:
+                izabranaBoja = R.color.roze;
+                view.setBackgroundResource(R.drawable.ic_color_selected);
+                break;
+            case R.id.siva_boja_imageButton:
+                izabranaBoja = R.color.siva;
+                view.setBackgroundResource(R.drawable.ic_color_selected);
+                break;
+            case R.id.zelena_boja_imageButton:
+                izabranaBoja = R.color.zelena;
+                view.setBackgroundResource(R.drawable.ic_color_selected);
+                break;
+            case R.id.lila_boja_imageButton:
+                izabranaBoja = R.color.lila;
+                view.setBackgroundResource(R.drawable.ic_color_selected);
+                break;
+            case R.id.narandzasta_boja_imageButton:
+                izabranaBoja = R.color.narandzasta;
+                view.setBackgroundResource(R.drawable.ic_color_selected);
+                break;
+            case R.id.crna_boja_imageButton:
+                izabranaBoja = R.color.crna;
+                view.setBackgroundResource(R.drawable.ic_color_selected);
+                break;
         }
+
+    }
+}
+
+
+class DecodePictureAsyncTask extends AsyncTask<String, Void, Bitmap> {
+
+    @SuppressLint("StaticFieldLeak")
+    private ImageView imageView;
+
+    public DecodePictureAsyncTask(ImageView imageView) {
+        this.imageView = imageView;
     }
 
+    @Override
+    protected void onPreExecute() {
+        super.onPreExecute();
+        imageView.setVisibility(View.INVISIBLE);
+    }
 
-    private static class DecodePictureAsyncTask extends AsyncTask<String, Void, Bitmap> {
+    protected Bitmap doInBackground(String... urls) {
+        String fileName = urls[0];
+        int targetW = imageView.getWidth();
+        int targetH = imageView.getHeight();
+        targetW = targetW == 0 ? 1 : targetW;
+        targetH = targetH == 0 ? 1 : targetH;
 
-        @SuppressLint("StaticFieldLeak")
-        private ImageView imageView;
+        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+        bmOptions.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(fileName, bmOptions);
+        int photoW = bmOptions.outWidth;
+        int photoH = bmOptions.outHeight;
 
-        public DecodePictureAsyncTask(ImageView imageView) {
-            this.imageView = imageView;
+        int scaleFactor = Math.min(photoW / targetW, photoH / targetH);
+
+        bmOptions.inJustDecodeBounds = false;
+        bmOptions.inSampleSize = scaleFactor;
+        bmOptions.inPurgeable = true;
+
+        Bitmap bitmap = BitmapFactory.decodeFile(fileName, bmOptions);
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
+        return bitmap;
+    }
 
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            imageView.setVisibility(View.INVISIBLE);
-        }
-
-        protected Bitmap doInBackground(String... urls) {
-            String fileName = urls[0];
-            int targetW = imageView.getWidth();
-            int targetH = imageView.getHeight();
-            targetW = targetW == 0 ? 1 : targetW;
-            targetH = targetH == 0 ? 1 : targetH;
-
-            BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-            bmOptions.inJustDecodeBounds = true;
-            BitmapFactory.decodeFile(fileName, bmOptions);
-            int photoW = bmOptions.outWidth;
-            int photoH = bmOptions.outHeight;
-
-            int scaleFactor = Math.min(photoW / targetW, photoH / targetH);
-
-            bmOptions.inJustDecodeBounds = false;
-            bmOptions.inSampleSize = scaleFactor;
-            bmOptions.inPurgeable = true;
-
-            Bitmap bitmap = BitmapFactory.decodeFile(fileName, bmOptions);
-            try {
-                Thread.sleep(3000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            return bitmap;
-        }
-
-        protected void onPostExecute(Bitmap bitmap) {
-            imageView.setVisibility(View.VISIBLE);
-            imageView.setImageBitmap(bitmap);
-            imageView = null;
-        }
+    protected void onPostExecute(Bitmap bitmap) {
+        imageView.setVisibility(View.VISIBLE);
+        imageView.setImageBitmap(bitmap);
+        imageView = null;
     }
 }

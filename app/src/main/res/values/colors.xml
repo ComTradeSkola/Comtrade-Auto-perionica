@@ -3,5 +3,13 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
-    <color name="crvena">#FF0000</color>
+    <color name="crvena">#ff3333</color>
+    <color name="zuta">#ffff33</color>
+    <color name="plava">#3333ff</color>
+    <color name="roze">#ff33ff</color>
+    <color name="siva">#adad85</color>
+    <color name="zelena">#5cd65c</color>
+    <color name="lila">#9933ff</color>
+    <color name="narandzasta">#ffad33</color>
+    <color name="crna">#262626</color>
 </resources>
