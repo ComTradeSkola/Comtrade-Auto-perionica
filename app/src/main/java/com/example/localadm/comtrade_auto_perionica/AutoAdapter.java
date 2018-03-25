@@ -25,6 +25,7 @@ public class AutoAdapter extends RecyclerView.Adapter<AutoAdapter.AutoViewHolder
         this.onAutomobilSelected = onAutomobilSelected;
     }
 
+    
     @Override
     public void onItemMove(int fromPosition, int toPosition) {
         if (fromPosition < toPosition) {

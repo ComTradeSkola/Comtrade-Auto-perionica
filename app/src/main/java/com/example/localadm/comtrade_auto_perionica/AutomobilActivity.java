@@ -3,6 +3,7 @@ package com.example.localadm.comtrade_auto_perionica;
 import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -43,20 +44,21 @@ public class AutomobilActivity extends AppCompatActivity implements AutoAdapter.
 
         //Automobil automobil;
 
-        autoList = new ArrayList<>();
+        if (savedInstanceState==null){
+            readAutoFromDatabase();
+            //autoList.add(new Automobil("Dalibor Mirkovic", "BG 11445 ww", "054265465", 150, true, true, false, 0));
+            //autoList.add(new Automobil("Misa Peric", "BG 11345 33", "054635465", 50, true, false, false, 0));
 
-        autoList.add(new Automobil("Dalibor Mirkovic", "BG 11445 ww", "054265465", 150, true, true, false, 0));
-        autoList.add(new Automobil("Misa Peric", "BG 11345 33", "054635465", 50, true, false, false, 0));
+            recyclerView = findViewById(R.id.recycler_view);
 
-        recyclerView = findViewById(R.id.recycler_view);
+            autoAdapter = new AutoAdapter(autoList, this);
+            ItemTouchHelper.Callback callback =
+                    new SimpleItemTouchHelperCallback(autoAdapter);
+            ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
+            touchHelper.attachToRecyclerView(recyclerView);
+            recyclerView.setAdapter(autoAdapter);
 
-        autoAdapter = new AutoAdapter(autoList, this);
-        ItemTouchHelper.Callback callback =
-                new SimpleItemTouchHelperCallback(autoAdapter);
-        ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
-        touchHelper.attachToRecyclerView(recyclerView);
-        recyclerView.setAdapter(autoAdapter);
-
+        }
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         FloatingActionButton fab = findViewById(R.id.fab);
@@ -66,6 +68,46 @@ public class AutomobilActivity extends AppCompatActivity implements AutoAdapter.
                 otvoriDodajAutoActivity();
             }
         });
+    }
+
+
+    //ovo zatvara vezu sa bazom kaka se ovaj activiti "ubije, zatvori"
+    @Override
+    protected void onDestroy() {
+        database.close();
+        super.onDestroy();
+    }
+
+    private void readAutoFromDatabase() {
+        autoList = new ArrayList<>();
+        String colums[] = {
+                DatabaseContract.Automobil._ID,
+                DatabaseContract.Automobil.IME_VLASNIKA,
+                DatabaseContract.Automobil.REGISTRACIJA,
+                DatabaseContract.Automobil.BROJ_TELEFONA,
+                DatabaseContract.Automobil.CENA,
+                DatabaseContract.Automobil.PRANJE,
+                DatabaseContract.Automobil.VOSKIRANJE,
+                DatabaseContract.Automobil.USISAVANJE,
+                DatabaseContract.Automobil.BOJA,
+                DatabaseContract.Automobil.SLIKA
+        };
+        Cursor cursor = database.query(DatabaseContract.Automobil.TABLE_NAME,
+                colums, null, null, null, null, null);
+        while(cursor.moveToNext()){
+            String imeVlasnika = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseContract.Automobil.IME_VLASNIKA));
+            String registracija = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseContract.Automobil.REGISTRACIJA));
+            String brojTelefona = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseContract.Automobil.BROJ_TELEFONA));
+            String slikaURL = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseContract.Automobil.SLIKA));
+            int cena = cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseContract.Automobil.CENA));
+            int pranje = cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseContract.Automobil.PRANJE));
+            int usisavanje = cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseContract.Automobil.USISAVANJE));
+            int voskiranje = cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseContract.Automobil.VOSKIRANJE));
+            int boja = cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseContract.Automobil.BOJA));
+            Automobil automobil = new Automobil(imeVlasnika, registracija, brojTelefona, slikaURL, cena, pranje==1, usisavanje==1, voskiranje==1, boja);
+            autoList.add(automobil);
+        }
+        cursor.close();
     }
 
     @Override
