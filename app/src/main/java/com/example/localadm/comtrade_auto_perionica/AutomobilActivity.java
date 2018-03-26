@@ -15,6 +15,7 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 import com.example.localadm.comtrade_auto_perionica.database.DatabaseContract;
 import com.example.localadm.comtrade_auto_perionica.database.DatabaseHelper;
@@ -29,6 +30,7 @@ public class AutomobilActivity extends AppCompatActivity implements AutoAdapter.
     AutoAdapter autoAdapter;
     DatabaseHelper databaseHelper;
     SQLiteDatabase database;
+    private TextView ukupnaCenaTextView;
 
     int ukupnaCena; //TODO cena svih pranja, voditi racuna da ovo treba da se sacuva i kada se aplikacija zavrsi i kada se aktiviti rotira. Koristiti shared preferences.
 
@@ -37,6 +39,8 @@ public class AutomobilActivity extends AppCompatActivity implements AutoAdapter.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_automobil);
         Toolbar toolbar = findViewById(R.id.toolbar);
+        ukupnaCenaTextView = findViewById(R.id.ukupna_cena);
+
         setSupportActionBar(toolbar);
 
         databaseHelper = new DatabaseHelper(this);
@@ -60,6 +64,9 @@ public class AutomobilActivity extends AppCompatActivity implements AutoAdapter.
 
         }
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        //TODO izvuci trenutnu cenu iz shared preferanca i postaviti je u ukupna cena
+        setUkupnaCena();
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -168,6 +175,11 @@ public class AutomobilActivity extends AppCompatActivity implements AutoAdapter.
         return super.onOptionsItemSelected(item);
     }
 
+    private void setUkupnaCena() {
+        String cenaText = getString(R.string.ukupna_cena_text, ukupnaCena);
+        ukupnaCenaTextView.setText(cenaText);
+    }
+
     @Override
     public void onAutomobilSelected(Automobil automobil) {
         Intent intent = new Intent(this, DodajAutoActivity.class);
@@ -184,7 +196,7 @@ public class AutomobilActivity extends AppCompatActivity implements AutoAdapter.
     @Override
     public void onAutomobilDone(Automobil automobil) {
         //TODO ako je automobil opran, to znaci da treba da uzmemo cenu, da je dodamo na cene koje vec imamo, i onda da uklonimo auto iz databasa
-        //ukupnaCena += cena;
+        //ukupnaCena += cena; pa pozvati setUkupnaCena
         //sto znaci pozvati metodu ukloniAutoIzDatabase i proslediti joj automobilov databaseId
     }
 
