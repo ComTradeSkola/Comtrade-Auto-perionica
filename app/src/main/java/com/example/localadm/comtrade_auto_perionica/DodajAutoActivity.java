@@ -84,6 +84,18 @@ public class DodajAutoActivity extends AppCompatActivity {
                 String imeString = imeVlasnikatextView.getText().toString();
                 String registracijaString = registracijaTextView.getText().toString();
                 String telefonString = brojtelefonaTextView.getText().toString();
+                int cenaUsluge = 0;
+
+
+                if (pranjeCheckbox.isChecked()) {
+                    cenaUsluge = cenaUsluge + 200;
+                }
+                if (usisavanjeCheckbox.isChecked()) {
+                    cenaUsluge = cenaUsluge + 100;
+                }
+                if (voskiranjeCheckbox.isChecked()) {
+                    cenaUsluge = cenaUsluge +150;
+                }
 
                 if (imeVlasnikatextView.length() == 0) {
                     Snackbar.make(view, "Niste uneli ime", Snackbar.LENGTH_SHORT).show();
@@ -100,6 +112,7 @@ public class DodajAutoActivity extends AppCompatActivity {
                     automobil.setUsisavanje(usisavanjeCheckbox.isChecked());
                     automobil.setSlikaUri(lokacijaSlike);
                     automobil.setBoja(izabranaBoja);
+                    automobil.setCena(cenaUsluge);
 
                     Intent intent = new Intent();
                     intent.putExtra(AUTOMOBIL__INTENT_KEY, automobil);
