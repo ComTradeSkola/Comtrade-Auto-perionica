@@ -31,7 +31,6 @@ public class AutomobilActivity extends AppCompatActivity implements AutoAdapter.
     DatabaseHelper databaseHelper;
     SQLiteDatabase database;
     private TextView ukupnaCenaTextView;
-
     int ukupnaCena; //TODO cena svih pranja, voditi racuna da ovo treba da se sacuva i kada se aplikacija zavrsi i kada se aktiviti rotira. Koristiti shared preferences.
 
     @Override
@@ -102,6 +101,7 @@ public class AutomobilActivity extends AppCompatActivity implements AutoAdapter.
         Cursor cursor = database.query(DatabaseContract.Automobil.TABLE_NAME,
                 colums, null, null, null, null, null);
         while(cursor.moveToNext()){
+            long dataBaseId = cursor.getLong(cursor.getColumnIndexOrThrow(DatabaseContract.Automobil._ID));
             String imeVlasnika = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseContract.Automobil.IME_VLASNIKA));
             String registracija = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseContract.Automobil.REGISTRACIJA));
             String brojTelefona = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseContract.Automobil.BROJ_TELEFONA));
@@ -111,7 +111,7 @@ public class AutomobilActivity extends AppCompatActivity implements AutoAdapter.
             int usisavanje = cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseContract.Automobil.USISAVANJE));
             int voskiranje = cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseContract.Automobil.VOSKIRANJE));
             int boja = cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseContract.Automobil.BOJA));
-            Automobil automobil = new Automobil(imeVlasnika, registracija, brojTelefona, slikaURL, cena, pranje==1, usisavanje==1, voskiranje==1, boja);
+            Automobil automobil = new Automobil(dataBaseId, imeVlasnika, registracija, brojTelefona, slikaURL, cena, pranje==1, usisavanje==1, voskiranje==1, boja);
             autoList.add(automobil);
         }
         cursor.close();
@@ -144,7 +144,8 @@ public class AutomobilActivity extends AppCompatActivity implements AutoAdapter.
         contentValues.put(DatabaseContract.Automobil.VOSKIRANJE, automobil.isVoskiranje() ? 1 : 0);
         contentValues.put(DatabaseContract.Automobil.USISAVANJE, automobil.isUsisavanje() ? 1 : 0);
         contentValues.put(DatabaseContract.Automobil.SLIKA, automobil.getSlikaUri());
-        database.insert(DatabaseContract.Automobil.TABLE_NAME, null, contentValues);
+        long id = database.insert(DatabaseContract.Automobil.TABLE_NAME, null, contentValues);
+        automobil.setDatabaseID(id);
     }
 
 
@@ -195,12 +196,12 @@ public class AutomobilActivity extends AppCompatActivity implements AutoAdapter.
 
     @Override
     public void onAutomobilDone(Automobil automobil) {
-        //TODO ako je automobil opran, to znaci da treba da uzmemo cenu, da je dodamo na cene koje vec imamo, i onda da uklonimo auto iz databasa
-        //ukupnaCena += cena; pa pozvati setUkupnaCena
-        //sto znaci pozvati metodu ukloniAutoIzDatabase i proslediti joj automobilov databaseId
+        ukupnaCena += automobil.izracunaCenuPranja();
+        setUkupnaCena();
+        ukloniAutoIzDatabase(automobil.getDatabaseID());
     }
 
-    private void ukloniAutoIzDatabase(int autoDatabaseId) {
+    private void ukloniAutoIzDatabase(long autoDatabaseId) {
         //TODO ukloniti iz database auto ciji je id = autoDatabaseId
     }
 }

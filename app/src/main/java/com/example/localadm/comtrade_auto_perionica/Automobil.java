@@ -18,7 +18,7 @@ public class Automobil implements Parcelable {
         }
     };
 
-    private String databaseID;
+    private long databaseID;
     private String imeVlasnika;
     private String registracija;
     private String brojTelefona;
@@ -29,7 +29,7 @@ public class Automobil implements Parcelable {
     private boolean voskiranje;
     private int boja;
 
-    public Automobil(String databaseID, String imeVlasnika, String registracija, String brojTelefona, String slikaUri, int cena, boolean pranje, boolean usisavanje, boolean voskiranje, int boja) {
+    public Automobil(long databaseID, String imeVlasnika, String registracija, String brojTelefona, String slikaUri, int cena, boolean pranje, boolean usisavanje, boolean voskiranje, int boja) {
         this.databaseID = databaseID;
         this.imeVlasnika = imeVlasnika;
         this.registracija = registracija;
@@ -92,7 +92,7 @@ public class Automobil implements Parcelable {
     }
 
     protected Automobil(Parcel in) {
-        databaseID = in.readString();
+        databaseID = in.readLong();
         imeVlasnika = in.readString();
         registracija = in.readString();
         brojTelefona = in.readString();
@@ -104,11 +104,11 @@ public class Automobil implements Parcelable {
         cena = in.readInt();
     }
 
-    public String getDatabaseID() {
+    public long getDatabaseID() {
         return databaseID;
     }
 
-    public void setDatabaseID(String databaseID) {
+    public void setDatabaseID(long databaseID) {
         this.databaseID = databaseID;
     }
 
@@ -184,6 +184,17 @@ public class Automobil implements Parcelable {
         this.boja = boja;
     }
 
+    public int izracunaCenuPranja() {
+        int cena = 0;
+        if (pranje) {
+            cena += 500;
+        }
+        if (usisavanje) {
+            cena += 200;
+        }
+        return cena;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -191,7 +202,7 @@ public class Automobil implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(databaseID);
+        dest.writeLong(databaseID);
         dest.writeString(imeVlasnika);
         dest.writeString(registracija);
         dest.writeString(brojTelefona);
