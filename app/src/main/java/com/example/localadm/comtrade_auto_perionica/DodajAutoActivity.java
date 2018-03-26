@@ -51,6 +51,7 @@ public class DodajAutoActivity extends AppCompatActivity {
 
     //TODO zapamtiti da se na rotaciji ovo mora sacuvati i da se na osnovu ovoga mora opet oznaciti koja je boja selektovana
     int izabranaBoja;
+    Automobil automobil;
 
 
     @Override
@@ -104,15 +105,17 @@ public class DodajAutoActivity extends AppCompatActivity {
                 } else if (brojtelefonaTextView.length() == 0) {
                     Snackbar.make(view, "Niste uneli broj telefona", Snackbar.LENGTH_SHORT).show();
                 } else {
-                    Automobil automobil = new Automobil(imeString);
-                    automobil.setRegistracija(registracijaString);
-                    automobil.setBrojTelefona(telefonString);
-                    automobil.setPranje(pranjeCheckbox.isChecked());
-                    automobil.setVoskiranje(voskiranjeCheckbox.isChecked());
-                    automobil.setUsisavanje(usisavanjeCheckbox.isChecked());
-                    automobil.setSlikaUri(lokacijaSlike);
-                    automobil.setBoja(izabranaBoja);
-                    automobil.setCena(cenaUsluge);
+                    if (automobil == null) {
+                        automobil = new Automobil(imeString);
+                        automobil.setRegistracija(registracijaString);
+                        automobil.setBrojTelefona(telefonString);
+                        automobil.setPranje(pranjeCheckbox.isChecked());
+                        automobil.setVoskiranje(voskiranjeCheckbox.isChecked());
+                        automobil.setUsisavanje(usisavanjeCheckbox.isChecked());
+                        automobil.setSlikaUri(lokacijaSlike);
+                        automobil.setBoja(izabranaBoja);
+                        automobil.setCena(cenaUsluge);
+                    }
 
                     Intent intent = new Intent();
                     intent.putExtra(AUTOMOBIL__INTENT_KEY, automobil);
@@ -121,6 +124,11 @@ public class DodajAutoActivity extends AppCompatActivity {
                 }
             }
         });
+        automobil = getIntent().getParcelableExtra("todo_to_edit");
+        if (automobil != null) {
+            imeVlasnikatextView.setText(automobil.getImeVlasnika());
+            //TODO odraditi ovo za druge podatke, posebno obratiti paznju na sliku
+        }
     }
 
     private void proveriPermisiju() {
