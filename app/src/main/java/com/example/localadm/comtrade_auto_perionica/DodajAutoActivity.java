@@ -48,6 +48,10 @@ public class DodajAutoActivity extends AppCompatActivity {
     Button dodajAutoButton;
     ConstraintLayout layout;
     String lokacijaSlike;
+    View izabranaBojaView;
+    TextView ukupnaCenaUsluge;
+    int cenaUsluge = 0;
+
 
     //TODO zapamtiti da se na rotaciji ovo mora sacuvati i da se na osnovu ovoga mora opet oznaciti koja je boja selektovana
     int izabranaBoja;
@@ -61,6 +65,7 @@ public class DodajAutoActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         layout = findViewById(R.id.dodaj_auto_layout);
+
         imageView = findViewById(R.id.image_view_dodaj_auto);
         uslikajImageButton = findViewById(R.id.uslikaj_image_button);
         uslikajImageButton.setOnClickListener(new View.OnClickListener() {
@@ -69,12 +74,22 @@ public class DodajAutoActivity extends AppCompatActivity {
                 proveriPermisiju();
             }
         });
+
         imeVlasnikatextView = findViewById(R.id.ime_vlasnika_text_view);
         registracijaTextView = findViewById(R.id.registracija_text_view);
         brojtelefonaTextView = findViewById(R.id.broj_telefona_text_view);
+
         pranjeCheckbox = findViewById(R.id.pranje_checkbox);
         usisavanjeCheckbox = findViewById(R.id.usisavanje_checkbox);
         voskiranjeCheckbox = findViewById(R.id.voskiranje_checkbox);
+        ukupnaCenaUsluge = findViewById(R.id.ukupna_cena_usluge);
+
+        izabranaBojaView = findViewById(R.id.izabrana_boja_view);
+
+
+
+
+
         dodajAutoButton = findViewById(R.id.dodaj_auto_button);
         dodajAutoButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,8 +99,6 @@ public class DodajAutoActivity extends AppCompatActivity {
                 String imeString = imeVlasnikatextView.getText().toString();
                 String registracijaString = registracijaTextView.getText().toString();
                 String telefonString = brojtelefonaTextView.getText().toString();
-                int cenaUsluge = 0;
-
 
                 if (pranjeCheckbox.isChecked()) {
                     cenaUsluge = cenaUsluge + 200;
@@ -94,8 +107,9 @@ public class DodajAutoActivity extends AppCompatActivity {
                     cenaUsluge = cenaUsluge + 100;
                 }
                 if (voskiranjeCheckbox.isChecked()) {
-                    cenaUsluge = cenaUsluge +150;
+                    cenaUsluge = cenaUsluge + 150;
                 }
+
 
                 if (imeVlasnikatextView.length() == 0) {
                     Snackbar.make(view, "Niste uneli ime", Snackbar.LENGTH_SHORT).show();
@@ -121,6 +135,7 @@ public class DodajAutoActivity extends AppCompatActivity {
                 }
             }
         });
+
     }
 
     private void proveriPermisiju() {
@@ -211,39 +226,39 @@ public class DodajAutoActivity extends AppCompatActivity {
         switch (viewId) {
             case R.id.crvena_boja_imageButton:
                 izabranaBoja = R.color.crvena;
-                view.setBackgroundResource(R.drawable.ic_color_selected);
+                izabranaBojaView.setBackgroundResource(R.color.crvena);
                 break;
             case R.id.zuta_boja_imageButton:
                 izabranaBoja = R.color.zuta;
-                view.setBackgroundResource(R.drawable.ic_color_selected);
+                izabranaBojaView.setBackgroundResource(R.color.zuta);
                 break;
             case R.id.plava_boja_imageButton:
                 izabranaBoja = R.color.plava;
-                view.setBackgroundResource(R.drawable.ic_color_selected);
+                izabranaBojaView.setBackgroundResource(R.color.plava);
                 break;
             case R.id.roze_boja_imageButton:
                 izabranaBoja = R.color.roze;
-                view.setBackgroundResource(R.drawable.ic_color_selected);
+                izabranaBojaView.setBackgroundResource(R.color.roze);
                 break;
             case R.id.siva_boja_imageButton:
                 izabranaBoja = R.color.siva;
-                view.setBackgroundResource(R.drawable.ic_color_selected);
+                izabranaBojaView.setBackgroundResource(R.color.siva);
                 break;
             case R.id.zelena_boja_imageButton:
                 izabranaBoja = R.color.zelena;
-                view.setBackgroundResource(R.drawable.ic_color_selected);
+                izabranaBojaView.setBackgroundResource(R.color.zelena);
                 break;
             case R.id.lila_boja_imageButton:
                 izabranaBoja = R.color.lila;
-                view.setBackgroundResource(R.drawable.ic_color_selected);
+                izabranaBojaView.setBackgroundResource(R.color.lila);
                 break;
             case R.id.narandzasta_boja_imageButton:
                 izabranaBoja = R.color.narandzasta;
-                view.setBackgroundResource(R.drawable.ic_color_selected);
+                izabranaBojaView.setBackgroundResource(R.color.narandzasta);
                 break;
             case R.id.crna_boja_imageButton:
                 izabranaBoja = R.color.crna;
-                view.setBackgroundResource(R.drawable.ic_color_selected);
+                izabranaBojaView.setBackgroundResource(R.color.crna);
                 break;
         }
 

@@ -247,5 +247,71 @@
         app:layout_constraintBottom_toBottomOf="@+id/image_view_dodaj_auto"
         app:layout_constraintEnd_toEndOf="@+id/image_view_dodaj_auto" />
 
+    <View
+        android:id="@+id/izabrana_boja_view"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        app:srcCompat="@drawable/ic_no_color"
+        app:layout_constraintBottom_toTopOf="@+id/zuta_boja_imageButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/broj_telefona_text_view"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/iazabrana_boja_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="Boja:"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toTopOf="@+id/zuta_boja_imageButton"
+        app:layout_constraintEnd_toStartOf="@+id/izabrana_boja_view"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/broj_telefona_text_view"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/ukupna_cena_usluge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/pranje_checkbox"
+        app:layout_constraintEnd_toStartOf="@+id/iazabrana_boja_text"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/cena_slovima"
+        app:layout_constraintTop_toBottomOf="@+id/broj_telefona_text_view"
+        app:layout_constraintVertical_bias="0.0"
+        tools:text="500" />
+
+    <TextView
+        android:id="@+id/cena_slovima"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="CENA:"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/broj_telefona_text_view" />
+
 
 </android.support.constraint.ConstraintLayout>
