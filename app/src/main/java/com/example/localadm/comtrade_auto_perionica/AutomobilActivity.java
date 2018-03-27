@@ -123,9 +123,14 @@ public class AutomobilActivity extends AppCompatActivity implements AutoAdapter.
             if (resultCode == Activity.RESULT_OK) {
                 Automobil automobil = data.getParcelableExtra(DodajAutoActivity.AUTOMOBIL__INTENT_KEY);
                 if (automobil != null) {
-                    autoList.add(automobil);
-                    autoAdapter.notifyItemInserted(autoList.size() - 1);
-                    addAutoToDataBase(automobil);
+                    if (automobil.getDatabaseID() != 0) {
+                        autoList.add(automobil);
+                        autoAdapter.notifyItemInserted(autoList.size() - 1);
+                        addAutoToDataBase(automobil);
+                    } else {
+                        autoAdapter.notifyDataSetChanged();
+                        updateAutoInDatabase(automobil);
+                    }
                 }
             }
         } else {
@@ -148,6 +153,9 @@ public class AutomobilActivity extends AppCompatActivity implements AutoAdapter.
         automobil.setDatabaseID(id);
     }
 
+    private void updateAutoInDatabase(Automobil automobil) {
+
+    }
 
     private void otvoriDodajAutoActivity() {
         Intent intent = new Intent(this, DodajAutoActivity.class);
