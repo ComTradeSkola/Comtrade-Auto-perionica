@@ -25,15 +25,17 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+
 import java.io.File;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class DodajAutoActivity extends AppCompatActivity {
 
-    public static final String AUTOMOBIL__INTENT_KEY = "automobil_intent_key";
+    public static final String AUTOMOBIL_INTENT_KEY = "automobil_intent_key";
+    public static final String AUTOMOBIL_TO_EDIT_BUNDLE_KEY = "automobil_bundle_key";
 
     private static final int PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE = 10;
     private static final int REQUEST_IMAGE_CAPTURE = 5;
@@ -89,7 +91,22 @@ public class DodajAutoActivity extends AppCompatActivity {
         izabranaBojaView = findViewById(R.id.izabrana_boja_view);
 
 
-
+        automobil = getIntent().getParcelableExtra(AUTOMOBIL_TO_EDIT_BUNDLE_KEY);
+        if (automobil != null) {
+            imeVlasnikatextView.setText(automobil.getImeVlasnika());
+            registracijaTextView.setText(automobil.getRegistracija());
+            brojtelefonaTextView.setText(automobil.getBrojTelefona());
+            pranjeCheckbox.setChecked(automobil.isPranje());
+            voskiranjeCheckbox.setChecked(automobil.isVoskiranje());
+            usisavanjeCheckbox.setChecked(automobil.isUsisavanje());
+            lokacijaSlike = automobil.getSlikaUri();
+            if (lokacijaSlike != null && !lokacijaSlike.isEmpty()) {
+                Glide.with(this)
+                        .load(lokacijaSlike)
+                        .into(imageView);
+            }
+            //TODO odraditi ovo za boju, to je to
+        }
 
 
         dodajAutoButton = findViewById(R.id.dodaj_auto_button);
@@ -122,42 +139,26 @@ public class DodajAutoActivity extends AppCompatActivity {
                 } else {
 
                     if (automobil == null) {
-                        automobil = new Automobil(imeString);
-                        automobil.setRegistracija(registracijaString);
-                        automobil.setBrojTelefona(telefonString);
-                        automobil.setPranje(pranjeCheckbox.isChecked());
-                        automobil.setVoskiranje(voskiranjeCheckbox.isChecked());
-                        automobil.setUsisavanje(usisavanjeCheckbox.isChecked());
-                        automobil.setSlikaUri(lokacijaSlike);
-                        automobil.setBoja(izabranaBoja);
-                        automobil.setCena(cenaUsluge);
+                        automobil = new Automobil();
                     }
-
-
+                    automobil.setImeVlasnika(imeString);
+                    automobil.setRegistracija(registracijaString);
+                    automobil.setBrojTelefona(telefonString);
+                    automobil.setPranje(pranjeCheckbox.isChecked());
+                    automobil.setVoskiranje(voskiranjeCheckbox.isChecked());
+                    automobil.setUsisavanje(usisavanjeCheckbox.isChecked());
+                    automobil.setSlikaUri(lokacijaSlike);
+                    automobil.setBoja(izabranaBoja);
+                    automobil.setCena(cenaUsluge);
 
                     Intent intent = new Intent();
-                    intent.putExtra(AUTOMOBIL__INTENT_KEY, automobil);
+                    intent.putExtra(AUTOMOBIL_INTENT_KEY, automobil);
                     setResult(RESULT_OK, intent);
                     finish();
                 }
             }
         });
-
-        automobil = getIntent().getParcelableExtra("automobil_to_edit");
-        if (automobil != null) {
-            imeVlasnikatextView.setText(automobil.getImeVlasnika());
-            registracijaTextView.setText(automobil.getRegistracija());
-            brojtelefonaTextView.setText(automobil.getBrojTelefona());
-            pranjeCheckbox.setChecked(automobil.isPranje());
-            voskiranjeCheckbox.setChecked(automobil.isVoskiranje());
-            usisavanjeCheckbox.setChecked(automobil.isUsisavanje());
-            lokacijaSlike.toString(automobil.getSlikaUri());
-
-            //TODO odraditi ovo za druge podatke, posebno obratiti paznju na sliku
-        }
     }
-
-
 
     private void proveriPermisiju() {
         if (ActivityCompat.checkSelfPermission(this,
@@ -239,7 +240,6 @@ public class DodajAutoActivity extends AppCompatActivity {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             new DecodePictureAsyncTask(imageView).execute(lokacijaSlike);
         }
-
     }
 
     public void onSelectColor(View view) {
@@ -304,8 +304,8 @@ class DecodePictureAsyncTask extends AsyncTask<String, Void, Bitmap> {
 
     protected Bitmap doInBackground(String... urls) {
         String fileName = urls[0];
-        int targetW = imageView.getWidth();
-        int targetH = imageView.getHeight();
+        int targetW = imageView.getMeasuredWidth();
+        int targetH = imageView.getMeasuredHeight();
         targetW = targetW == 0 ? 1 : targetW;
         targetH = targetH == 0 ? 1 : targetH;
 
@@ -321,13 +321,7 @@ class DecodePictureAsyncTask extends AsyncTask<String, Void, Bitmap> {
         bmOptions.inSampleSize = scaleFactor;
         bmOptions.inPurgeable = true;
 
-        Bitmap bitmap = BitmapFactory.decodeFile(fileName, bmOptions);
-        try {
-            Thread.sleep(3000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        return bitmap;
+        return BitmapFactory.decodeFile(fileName, bmOptions);
     }
 
     protected void onPostExecute(Bitmap bitmap) {

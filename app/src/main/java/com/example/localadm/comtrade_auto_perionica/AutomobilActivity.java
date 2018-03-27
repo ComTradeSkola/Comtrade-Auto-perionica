@@ -121,15 +121,27 @@ public class AutomobilActivity extends AppCompatActivity implements AutoAdapter.
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == DODAJ_AUTO_ACTIVITY_REQUEST_CODE) {
             if (resultCode == Activity.RESULT_OK) {
-                Automobil automobil = data.getParcelableExtra(DodajAutoActivity.AUTOMOBIL__INTENT_KEY);
+                Automobil automobil = data.getParcelableExtra(DodajAutoActivity.AUTOMOBIL_INTENT_KEY);
                 if (automobil != null) {
-                    if (automobil.getDatabaseID() != 0) {
+                    if (automobil.getDatabaseID() == 0) {
                         autoList.add(automobil);
                         autoAdapter.notifyItemInserted(autoList.size() - 1);
                         addAutoToDataBase(automobil);
                     } else {
-                        autoAdapter.notifyDataSetChanged();
-                        updateAutoInDatabase(automobil);
+                        int found = -1;
+                        for (int i = 0; i < autoList.size(); i++) {
+                            Automobil a = autoList.get(i);
+                            if (a.getDatabaseID() == automobil.getDatabaseID()) {
+                                found = i;
+                                break;
+                            }
+                        }
+                        if (found != -1) {
+                            autoList.remove(found);
+                            autoList.add(found, automobil);
+                            autoAdapter.notifyItemChanged(found);
+                            updateAutoInDatabase(automobil);
+                        }
                     }
                 }
             }
@@ -192,7 +204,7 @@ public class AutomobilActivity extends AppCompatActivity implements AutoAdapter.
     @Override
     public void onAutomobilSelected(Automobil automobil) {
         Intent intent = new Intent(this, DodajAutoActivity.class);
-        intent.putExtra("todo_to_edit", automobil);
+        intent.putExtra(DodajAutoActivity.AUTOMOBIL_TO_EDIT_BUNDLE_KEY, automobil);
         startActivityForResult(intent, DODAJ_AUTO_ACTIVITY_REQUEST_CODE);
     }
 
