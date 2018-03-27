@@ -22,6 +22,9 @@ import com.example.localadm.comtrade_auto_perionica.database.DatabaseHelper;
 
 import java.util.ArrayList;
 
+import static android.provider.BaseColumns._ID;
+import static com.example.localadm.comtrade_auto_perionica.database.DatabaseContract.Automobil.TABLE_NAME;
+
 public class AutomobilActivity extends AppCompatActivity implements AutoAdapter.OnAutomobilSelected {
 
     private static final int DODAJ_AUTO_ACTIVITY_REQUEST_CODE = 10;
@@ -98,7 +101,7 @@ public class AutomobilActivity extends AppCompatActivity implements AutoAdapter.
                 DatabaseContract.Automobil.BOJA,
                 DatabaseContract.Automobil.SLIKA
         };
-        Cursor cursor = database.query(DatabaseContract.Automobil.TABLE_NAME,
+        Cursor cursor = database.query(TABLE_NAME,
                 colums, null, null, null, null, null);
         while(cursor.moveToNext()){
             long dataBaseId = cursor.getLong(cursor.getColumnIndexOrThrow(DatabaseContract.Automobil._ID));
@@ -161,7 +164,7 @@ public class AutomobilActivity extends AppCompatActivity implements AutoAdapter.
         contentValues.put(DatabaseContract.Automobil.VOSKIRANJE, automobil.isVoskiranje() ? 1 : 0);
         contentValues.put(DatabaseContract.Automobil.USISAVANJE, automobil.isUsisavanje() ? 1 : 0);
         contentValues.put(DatabaseContract.Automobil.SLIKA, automobil.getSlikaUri());
-        long id = database.insert(DatabaseContract.Automobil.TABLE_NAME, null, contentValues);
+        long id = database.insert(TABLE_NAME, null, contentValues);
         automobil.setDatabaseID(id);
     }
 
@@ -210,6 +213,7 @@ public class AutomobilActivity extends AppCompatActivity implements AutoAdapter.
 
     @Override
     public void onAutomobileDeleted(Automobil automobil) {
+        ukloniAutoIzDatabase(automobil.getDatabaseID());
         //TODO ovde obrisati iz database, automobil, to znaci da je neko odustao.
         //sto znaci pozvati metodu ukloniAutoIzDatabase i proslediti joj automobilov databaseId
     }
@@ -222,6 +226,11 @@ public class AutomobilActivity extends AppCompatActivity implements AutoAdapter.
     }
 
     private void ukloniAutoIzDatabase(long autoDatabaseId) {
+
+        SQLiteDatabase db = databaseHelper.getWritableDatabase();
+        db.delete(TABLE_NAME, _ID + " = ?", new String[] { String.valueOf(autoDatabaseId)});
+        db.close();
+
         //TODO ukloniti iz database auto ciji je id = autoDatabaseId
     }
 }

@@ -105,6 +105,7 @@ public class DodajAutoActivity extends AppCompatActivity {
                         .load(lokacijaSlike)
                         .into(imageView);
             }
+
             //TODO odraditi ovo za boju, to je to
         }
 
