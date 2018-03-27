@@ -27,6 +27,7 @@ import android.widget.TextView;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -119,6 +120,7 @@ public class DodajAutoActivity extends AppCompatActivity {
                 } else if (brojtelefonaTextView.length() == 0) {
                     Snackbar.make(view, "Niste uneli broj telefona", Snackbar.LENGTH_SHORT).show();
                 } else {
+
                     if (automobil == null) {
                         automobil = new Automobil(imeString);
                         automobil.setRegistracija(registracijaString);
@@ -131,6 +133,8 @@ public class DodajAutoActivity extends AppCompatActivity {
                         automobil.setCena(cenaUsluge);
                     }
 
+
+
                     Intent intent = new Intent();
                     intent.putExtra(AUTOMOBIL__INTENT_KEY, automobil);
                     setResult(RESULT_OK, intent);
@@ -142,10 +146,17 @@ public class DodajAutoActivity extends AppCompatActivity {
         automobil = getIntent().getParcelableExtra("todo_to_edit");
         if (automobil != null) {
             imeVlasnikatextView.setText(automobil.getImeVlasnika());
+            registracijaTextView.setText(automobil.getRegistracija());
+            brojtelefonaTextView.setText(automobil.getBrojTelefona());
+            pranjeCheckbox.setChecked(automobil.isPranje());
+            voskiranjeCheckbox.setChecked(automobil.isVoskiranje());
+            usisavanjeCheckbox.setChecked(automobil.isUsisavanje());
+
             //TODO odraditi ovo za druge podatke, posebno obratiti paznju na sliku
         }
-
     }
+
+
 
     private void proveriPermisiju() {
         if (ActivityCompat.checkSelfPermission(this,

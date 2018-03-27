@@ -187,13 +187,16 @@ public class Automobil implements Parcelable {
     public int izracunaCenuPranja() {
         int cena = 0;
         if (pranje) {
-            cena += 500;
-        }
-        if (usisavanje) {
             cena += 200;
         }
+        if (usisavanje) {
+            cena += 100;
+        }
+        if (voskiranje) {
+            cena += 150;
+        }
         return cena;
-    }
+}
 
     @Override
     public int describeContents() {
