@@ -143,7 +143,7 @@ public class DodajAutoActivity extends AppCompatActivity {
             }
         });
 
-        automobil = getIntent().getParcelableExtra("todo_to_edit");
+        automobil = getIntent().getParcelableExtra("automobil_to_edit");
         if (automobil != null) {
             imeVlasnikatextView.setText(automobil.getImeVlasnika());
             registracijaTextView.setText(automobil.getRegistracija());
@@ -151,6 +151,7 @@ public class DodajAutoActivity extends AppCompatActivity {
             pranjeCheckbox.setChecked(automobil.isPranje());
             voskiranjeCheckbox.setChecked(automobil.isVoskiranje());
             usisavanjeCheckbox.setChecked(automobil.isUsisavanje());
+            lokacijaSlike.toString(automobil.getSlikaUri());
 
             //TODO odraditi ovo za druge podatke, posebno obratiti paznju na sliku
         }
