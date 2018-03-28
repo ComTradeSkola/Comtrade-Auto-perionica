@@ -35,7 +35,7 @@ public class AutomobilActivity extends AppCompatActivity implements AutoAdapter.
     DatabaseHelper databaseHelper;
     SQLiteDatabase database;
     private TextView ukupnaCenaTextView;
-    int ukupnaCena; //TODO cena svih pranja, voditi racuna da ovo treba da se sacuva i kada se aplikacija zavrsi i kada se aktiviti rotira. Koristiti shared preferences.
+    int ukupnaCena;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

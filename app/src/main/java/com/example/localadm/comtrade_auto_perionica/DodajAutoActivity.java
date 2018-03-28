@@ -18,6 +18,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -61,7 +62,6 @@ public class DodajAutoActivity extends AppCompatActivity {
     int cenaUsluge = 0;
 
 
-    //TODO zapamtiti da se na rotaciji ovo mora sacuvati i da se na osnovu ovoga mora opet oznaciti koja je boja selektovana
     int izabranaBoja;
     Automobil automobil;
 
@@ -73,7 +73,12 @@ public class DodajAutoActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        //TODO set back button
+
+        if (getSupportActionBar() != null) {
+
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
 
         layout = findViewById(R.id.dodaj_auto_layout);
 
@@ -184,6 +189,14 @@ public class DodajAutoActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home)
+            finish();
+
+        return super.onOptionsItemSelected(item);
     }
 
     private void proveriPermisiju() {
