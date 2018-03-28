@@ -29,6 +29,7 @@ public class AutomobilActivity extends AppCompatActivity implements AutoAdapter.
 
     private static final int DODAJ_AUTO_ACTIVITY_REQUEST_CODE = 10;
     RecyclerView recyclerView;
+    TextView nemaAutomobila;
     ArrayList<Automobil> autoList;
     AutoAdapter autoAdapter;
     DatabaseHelper databaseHelper;
@@ -42,6 +43,8 @@ public class AutomobilActivity extends AppCompatActivity implements AutoAdapter.
         setContentView(R.layout.activity_automobil);
         Toolbar toolbar = findViewById(R.id.toolbar);
         ukupnaCenaTextView = findViewById(R.id.ukupna_cena);
+        nemaAutomobila = findViewById(R.id.poruka_nema_automobila);
+        recyclerView = findViewById(R.id.recycler_view);
 
         setSupportActionBar(toolbar);
 
@@ -52,10 +55,9 @@ public class AutomobilActivity extends AppCompatActivity implements AutoAdapter.
 
         if (savedInstanceState==null){
             readAutoFromDatabase();
+            updateVisibilty();
             //autoList.add(new Automobil("Dalibor Mirkovic", "BG 11445 ww", "054265465", 150, true, true, false, 0));
             //autoList.add(new Automobil("Misa Peric", "BG 11345 33", "054635465", 50, true, false, false, 0));
-
-            recyclerView = findViewById(R.id.recycler_view);
 
             autoAdapter = new AutoAdapter(autoList, this);
             ItemTouchHelper.Callback callback =
@@ -146,6 +148,7 @@ public class AutomobilActivity extends AppCompatActivity implements AutoAdapter.
                             updateAutoInDatabase(automobil);
                         }
                     }
+                    updateVisibilty();
                 }
             }
         } else {
@@ -166,10 +169,6 @@ public class AutomobilActivity extends AppCompatActivity implements AutoAdapter.
         contentValues.put(DatabaseContract.Automobil.SLIKA, automobil.getSlikaUri());
         long id = database.insert(TABLE_NAME, null, contentValues);
         automobil.setDatabaseID(id);
-    }
-
-    private void updateAutoInDatabase(Automobil automobil) {
-
     }
 
     private void otvoriDodajAutoActivity() {
@@ -193,6 +192,8 @@ public class AutomobilActivity extends AppCompatActivity implements AutoAdapter.
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            //TODO dodati code koji ce da resetuje ukupnu cenu i view za ukupnu cenu
+            //TODO napravite novu metocu koja brise sve iz baze.
             return true;
         }
 
@@ -213,24 +214,45 @@ public class AutomobilActivity extends AppCompatActivity implements AutoAdapter.
 
     @Override
     public void onAutomobileDeleted(Automobil automobil) {
+        updateVisibilty();
         ukloniAutoIzDatabase(automobil.getDatabaseID());
-        //TODO ovde obrisati iz database, automobil, to znaci da je neko odustao.
-        //sto znaci pozvati metodu ukloniAutoIzDatabase i proslediti joj automobilov databaseId
     }
 
     @Override
     public void onAutomobilDone(Automobil automobil) {
         ukupnaCena += automobil.izracunaCenuPranja();
         setUkupnaCena();
+        updateVisibilty();
         ukloniAutoIzDatabase(automobil.getDatabaseID());
     }
 
     private void ukloniAutoIzDatabase(long autoDatabaseId) {
-
         SQLiteDatabase db = databaseHelper.getWritableDatabase();
         db.delete(TABLE_NAME, _ID + " = ?", new String[] { String.valueOf(autoDatabaseId)});
         db.close();
+    }
 
-        //TODO ukloniti iz database auto ciji je id = autoDatabaseId
+    private void updateAutoInDatabase(Automobil automobil) {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(DatabaseContract.Automobil.IME_VLASNIKA, automobil.getImeVlasnika());
+        contentValues.put(DatabaseContract.Automobil.REGISTRACIJA, automobil.getRegistracija());
+        contentValues.put(DatabaseContract.Automobil.BROJ_TELEFONA, automobil.getBrojTelefona());
+        contentValues.put(DatabaseContract.Automobil.CENA, automobil.getCena());
+        contentValues.put(DatabaseContract.Automobil.BOJA, automobil.getBoja());
+        contentValues.put(DatabaseContract.Automobil.PRANJE, automobil.isPranje() ? 1 : 0);
+        contentValues.put(DatabaseContract.Automobil.VOSKIRANJE, automobil.isVoskiranje() ? 1 : 0);
+        contentValues.put(DatabaseContract.Automobil.USISAVANJE, automobil.isUsisavanje() ? 1 : 0);
+        contentValues.put(DatabaseContract.Automobil.SLIKA, automobil.getSlikaUri());
+        long id = database.update(TABLE_NAME, contentValues, _ID + " = ?", new String[] { String.valueOf(automobil.getDatabaseID())});
+    }
+
+    public void updateVisibilty() {
+        if (autoList.isEmpty()) {
+            nemaAutomobila.setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.INVISIBLE);
+        } else {
+            nemaAutomobila.setVisibility(View.INVISIBLE);
+            recyclerView.setVisibility(View.VISIBLE);
+        }
     }
 }

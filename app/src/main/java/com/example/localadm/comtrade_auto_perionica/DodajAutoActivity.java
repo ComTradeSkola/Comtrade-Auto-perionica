@@ -21,6 +21,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -39,6 +40,10 @@ public class DodajAutoActivity extends AppCompatActivity {
 
     private static final int PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE = 10;
     private static final int REQUEST_IMAGE_CAPTURE = 5;
+
+    private static final int CENA_PRANJA = 200;
+    private static final int CENA_VOSKIRANJA = 150;
+    private static final int CENA_USISAVANJA = 100;
 
     ImageView imageView;
     ImageButton uslikajImageButton;
@@ -68,6 +73,8 @@ public class DodajAutoActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        //TODO set back button
+
         layout = findViewById(R.id.dodaj_auto_layout);
 
         imageView = findViewById(R.id.image_view_dodaj_auto);
@@ -83,10 +90,22 @@ public class DodajAutoActivity extends AppCompatActivity {
         registracijaTextView = findViewById(R.id.registracija_text_view);
         brojtelefonaTextView = findViewById(R.id.broj_telefona_text_view);
 
+        ukupnaCenaUsluge = findViewById(R.id.ukupna_cena_usluge);
         pranjeCheckbox = findViewById(R.id.pranje_checkbox);
+        pranjeCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    cenaUsluge += CENA_PRANJA;
+                } else {
+                    cenaUsluge -= CENA_PRANJA;
+                }
+                ukupnaCenaUsluge.setText(String.valueOf(cenaUsluge));
+            }
+        });
         usisavanjeCheckbox = findViewById(R.id.usisavanje_checkbox);
         voskiranjeCheckbox = findViewById(R.id.voskiranje_checkbox);
-        ukupnaCenaUsluge = findViewById(R.id.ukupna_cena_usluge);
+        //TODO dodati za ovo checkbox
 
         izabranaBojaView = findViewById(R.id.izabrana_boja_view);
 
@@ -120,6 +139,7 @@ public class DodajAutoActivity extends AppCompatActivity {
                 String registracijaString = registracijaTextView.getText().toString();
                 String telefonString = brojtelefonaTextView.getText().toString();
 
+                cenaUsluge = 0;
                 if (pranjeCheckbox.isChecked()) {
                     cenaUsluge = cenaUsluge + 200;
                 }
@@ -128,6 +148,11 @@ public class DodajAutoActivity extends AppCompatActivity {
                 }
                 if (voskiranjeCheckbox.isChecked()) {
                     cenaUsluge = cenaUsluge + 150;
+                }
+
+                if (!voskiranjeCheckbox.isChecked() && !pranjeCheckbox.isChecked() && !usisavanjeCheckbox.isChecked()) {
+                    //TODo prikazati poruku da nije dobro
+                    return;
                 }
 
 
