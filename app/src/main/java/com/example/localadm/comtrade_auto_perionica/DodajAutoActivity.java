@@ -109,8 +109,30 @@ public class DodajAutoActivity extends AppCompatActivity {
             }
         });
         usisavanjeCheckbox = findViewById(R.id.usisavanje_checkbox);
+        usisavanjeCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                if (isChecked) {
+                    cenaUsluge += CENA_USISAVANJA;
+                } else {
+                    cenaUsluge -= CENA_USISAVANJA;
+                }
+                ukupnaCenaUsluge.setText(String.valueOf(cenaUsluge));
+            }
+        });
         voskiranjeCheckbox = findViewById(R.id.voskiranje_checkbox);
-        //TODO dodati za ovo checkbox
+        voskiranjeCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                if (isChecked) {
+                    cenaUsluge += CENA_VOSKIRANJA;
+                } else {
+                    cenaUsluge -= CENA_VOSKIRANJA;
+                }
+                ukupnaCenaUsluge.setText(String.valueOf(cenaUsluge));
+            }
+        });
+
 
         izabranaBojaView = findViewById(R.id.izabrana_boja_view);
 
@@ -156,7 +178,7 @@ public class DodajAutoActivity extends AppCompatActivity {
                 }
 
                 if (!voskiranjeCheckbox.isChecked() && !pranjeCheckbox.isChecked() && !usisavanjeCheckbox.isChecked()) {
-                    //TODo prikazati poruku da nije dobro
+                    Snackbar.make(view, "Unesite bar jednu od sledecih usluga: Pranje, voskiranje, usisavanje ", Snackbar.LENGTH_SHORT).show();
                     return;
                 }
 
