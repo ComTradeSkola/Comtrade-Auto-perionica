@@ -69,7 +69,6 @@ public class AutomobilActivity extends AppCompatActivity implements AutoAdapter.
         }
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        //TODO izvuci trenutnu cenu iz shared preferanca i postaviti je u ukupna cena
         setUkupnaCena();
 
         FloatingActionButton fab = findViewById(R.id.fab);
@@ -201,7 +200,7 @@ public class AutomobilActivity extends AppCompatActivity implements AutoAdapter.
     }
 
     private void setUkupnaCena() {
-        String cenaText = getString(R.string.ukupna_cena_text, ukupnaCena);
+        String cenaText = getString(R.string.ukupna_zarada_text, ukupnaCena);
         ukupnaCenaTextView.setText(cenaText);
     }
 
