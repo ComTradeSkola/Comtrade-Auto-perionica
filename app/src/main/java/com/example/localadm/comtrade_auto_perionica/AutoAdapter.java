@@ -67,6 +67,12 @@ public class AutoAdapter extends RecyclerView.Adapter<AutoAdapter.AutoViewHolder
                 notifyItemRemoved(adapterPosition);
                 onAutomobilSelected.onAutomobileDeleted(automobil);
             }
+
+            @Override
+            public void onPozoviVlasnika(int adapterPosition) {
+                Automobil automobil = automobilList.remove(adapterPosition);
+                onAutomobilSelected.onPozoviVlasnika(automobil);
+            }
         });
     }
 
@@ -97,11 +103,13 @@ public class AutoAdapter extends RecyclerView.Adapter<AutoAdapter.AutoViewHolder
         void onAutomobilSelected(Automobil automobil);
         void onAutomobileDeleted(Automobil automobil);
         void onAutomobilDone(Automobil automobil);
+        void onPozoviVlasnika(Automobil automobil);
     }
 
     public interface OnAutomobilClick {
         void onAutomobilClicked(int position);
         void onUkloniAutomobil(int adapterPosition);
+        void onPozoviVlasnika(int adapterPosition);
     }
 
     static class AutoViewHolder extends RecyclerView.ViewHolder {
@@ -115,6 +123,7 @@ public class AutoAdapter extends RecyclerView.Adapter<AutoAdapter.AutoViewHolder
         private CheckBox voskiranje;
         private Button uklontAuto;
         private OnAutomobilClick onAutomobilClick;
+        private Button pozoviVlasnika;
 
         public AutoViewHolder(View itemView, final OnAutomobilClick onAutomobilClick) {
             super(itemView);
@@ -137,6 +146,16 @@ public class AutoAdapter extends RecyclerView.Adapter<AutoAdapter.AutoViewHolder
             usisavanje = itemView.findViewById(R.id.usisavanje_item);
             voskiranje = itemView.findViewById(R.id.voskiranje_item);
             uklontAuto = itemView.findViewById(R.id.ukolni_button_item);
+            pozoviVlasnika = itemView.findViewById(R.id.button_pozovi_vlasnika);
+            pozoviVlasnika.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int adapterPosition = getAdapterPosition();
+                    if (adapterPosition != RecyclerView.NO_POSITION && onAutomobilClick != null) {
+                        onAutomobilClick.onPozoviVlasnika(adapterPosition);
+                    }
+                }
+            });
             uklontAuto.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

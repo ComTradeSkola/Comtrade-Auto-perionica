@@ -152,10 +152,15 @@ public class DodajAutoActivity extends AppCompatActivity {
                         .into(imageView);
             }
             izabranaBoja = automobil.getBoja();
+            izabranaBojaView.setBackgroundResource(izabranaBoja);
         }
 
-
         dodajAutoButton = findViewById(R.id.dodaj_auto_button);
+        if (automobil != null) {
+            dodajAutoButton.setText("Edit Auto");
+        } else {
+            dodajAutoButton.setText("Add auto");
+        }
         dodajAutoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -389,4 +394,6 @@ class DecodePictureAsyncTask extends AsyncTask<String, Void, Bitmap> {
         imageView.setImageBitmap(bitmap);
         imageView = null;
     }
+
+
 }

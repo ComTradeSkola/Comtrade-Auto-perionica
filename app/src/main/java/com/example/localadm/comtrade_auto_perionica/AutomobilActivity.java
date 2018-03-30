@@ -2,9 +2,12 @@ package com.example.localadm.comtrade_auto_perionica;
 
 import android.app.Activity;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -47,6 +50,7 @@ public class AutomobilActivity extends AppCompatActivity implements AutoAdapter.
         recyclerView = findViewById(R.id.recycler_view);
 
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         databaseHelper = new DatabaseHelper(this);
         database = databaseHelper.getWritableDatabase();
@@ -80,10 +84,27 @@ public class AutomobilActivity extends AppCompatActivity implements AutoAdapter.
         });
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
+        ukupnaCena = sharedPref.getInt(getString(R.string.saved_zarada), 0);
+        setUkupnaCena();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putInt(getString(R.string.saved_zarada), ukupnaCena);
+        editor.apply();
+    }
 
     //ovo zatvara vezu sa bazom kaka se ovaj activiti "ubije, zatvori"
     @Override
     protected void onDestroy() {
+
         database.close();
         super.onDestroy();
     }
@@ -191,12 +212,20 @@ public class AutomobilActivity extends AppCompatActivity implements AutoAdapter.
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            //TODO dodati code koji ce da resetuje ukupnu cenu i view za ukupnu cenu
-            //TODO napravite novu metocu koja brise sve iz baze.
+            pocistiSve();
             return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void pocistiSve() {
+        ukupnaCena = 0;
+        setUkupnaCena();
+        autoList.clear();
+        autoAdapter.notifyDataSetChanged();
+        updateVisibilty();
+        ukloniSveIzBase();
     }
 
     private void setUkupnaCena() {
@@ -225,10 +254,24 @@ public class AutomobilActivity extends AppCompatActivity implements AutoAdapter.
         ukloniAutoIzDatabase(automobil.getDatabaseID());
     }
 
+    @Override
+    public void onPozoviVlasnika(Automobil automobil) {
+        String phoneNumber = automobil.getBrojTelefona();
+        if (phoneNumber != null && !phoneNumber.isEmpty()) {
+            Intent intent = new Intent(Intent.ACTION_DIAL);
+            intent.setData(Uri.parse("tel:" + phoneNumber));
+            startActivity(intent);
+        }
+    }
+
     private void ukloniAutoIzDatabase(long autoDatabaseId) {
         SQLiteDatabase db = databaseHelper.getWritableDatabase();
         db.delete(TABLE_NAME, _ID + " = ?", new String[] { String.valueOf(autoDatabaseId)});
-        db.close();
+    }
+
+    private void ukloniSveIzBase() {
+        SQLiteDatabase db = databaseHelper.getWritableDatabase();
+        db.delete(TABLE_NAME, null, null);
     }
 
     private void updateAutoInDatabase(Automobil automobil) {

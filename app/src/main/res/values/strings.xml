@@ -11,4 +11,5 @@
     <string name="ok">ok</string>
     <string name="ukupna_zarada_text">Zarada: %d</string>
     <string name="kliknite_na_da_dodate_automobil">Kliknite na + da dodate automobil</string>
+    <string name="saved_zarada">save_zarada_key</string>
 </resources>
