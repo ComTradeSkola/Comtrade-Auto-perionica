@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -123,7 +124,7 @@ public class AutoAdapter extends RecyclerView.Adapter<AutoAdapter.AutoViewHolder
         private CheckBox voskiranje;
         private Button uklontAuto;
         private OnAutomobilClick onAutomobilClick;
-        private Button pozoviVlasnika;
+        private ImageButton pozoviVlasnika;
 
         public AutoViewHolder(View itemView, final OnAutomobilClick onAutomobilClick) {
             super(itemView);
